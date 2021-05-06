@@ -10,8 +10,8 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy Size, xy position);
 BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position);
 BYTE* BoyutAyarla(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position, int img);
 BYTE* BoyutGenislet(BYTE* Raw, int% width, int% height, int Width, int Height);
-BYTE* GaussPyramid(BYTE* Raw, int% width, int% height);
-BYTE2* GaussPyramidBYTE2(BYTE* Raw, int% width, int% height);
+template<typename T>
+T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result);
 template<typename T>
 BYTE2* Difference(BYTE* Gauss1, T* Gauss2, int width, int height);
 template<typename T>
