@@ -141,7 +141,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Corner.h" />
+    <ClInclude Include="Dots.h" />
     <ClInclude Include="FFT.h" />
     <ClInclude Include="Homography.h" />
     <ClInclude Include="Image.h" />
@@ -151,9 +151,8 @@
     <ClInclude Include="Panorama.h" />
     <ClInclude Include="Correlation.h" />
     <ClInclude Include="Process.h" />
-    <ClInclude Include="Zone.h" />
     <ClInclude Include="SVD.h" />
-    <ClInclude Include="xy.h" />
+    <ClInclude Include="Definitions.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Image_Stitching.resx">
@@ -167,7 +166,6 @@
     <ClCompile Include="Panorama.cpp" />
     <ClCompile Include="Correlation.cpp" />
     <ClCompile Include="Process.cpp" />
-    <ClCompile Include="Zone.cpp" />
     <ClCompile Include="SVD.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

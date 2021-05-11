@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Corner.h">
+    <ClInclude Include="Dots.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FFT.h">
@@ -36,13 +36,10 @@
     <ClInclude Include="SVD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xy.h">
+    <ClInclude Include="Definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Correlation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Zone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Image_Stitching.h">
@@ -66,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Correlation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Zone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Image_Stitching.cpp">

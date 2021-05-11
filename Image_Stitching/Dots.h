@@ -2,33 +2,9 @@
 #include <math.h>
 #include <cstdlib> 
 #include <ctime> 
-#include "xy.h"
+#include "Definitions.h"
 #define MIN(a,b) (a < b) ? a : b
 
-class Corner
-{
-public:
-	Corner(int x, int y);
-	double Distance(xy* pocDot);
-	~Corner();
-
-private:
-	int x, y;
-	friend xy* GetPOCDotVec(Corner* corner, size_t cornerID, xy* pocDot);
-};
-
-Corner::Corner(int x, int y)
-{
-	this->x = x;
-	this->y = y;
-}
-
-double Corner::Distance(xy* pocDot)
-{
-	return sqrt(pow((pocDot->x - x), 2) + pow(pocDot->y - y, 2));
-}
-
-Corner::~Corner() {}
 
 /*
 * cornerID
@@ -96,48 +72,6 @@ xy* Rand4Dots(size_t cornerID, xy* pocDot, int imgWidth, int imgHeight)
 	}
 	
 	return rDots;
-}
-
-
-/*
-* cornerID
-*
-	0 ********* 1
-	* 		    *
-	* 		    *
-	* 		    *
-	2 ********* 3
-*/
-xy* GetPOCDotVec(Corner* corner, size_t cornerID, xy* pocDot) {
-
-	xy* vec = new xy;
-	switch (cornerID)
-	{
-	case 0:
-		vec->x = pocDot->x;
-		vec->y = pocDot->y;
-		break;
-
-	case 1:
-		vec->x = corner->x - pocDot->x;
-		vec->y = pocDot->y - corner->y;
-		break; 
-
-	case 2:
-		vec->x = pocDot->x - corner->x;
-		vec->y = corner->y - pocDot->y;
-		break; 
-
-	case 3:
-		vec->x = corner->x - pocDot->x;
-		vec->y = corner->y - pocDot->y;
-		break; 
-
-	default:
-		break;
-	}
-	
-	return vec;
 }
 
 

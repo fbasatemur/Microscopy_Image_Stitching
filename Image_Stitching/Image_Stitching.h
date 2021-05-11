@@ -1,14 +1,13 @@
 #pragma once
 #include <atlstr.h>
-#include "Image.h"
-#include "Process.h"
 #include <msclr\marshal_cppstd.h>
 
-#include "Correlation.h"
-#include "Corner.h"
+#include "Image.h"
+#include "Process.h"
 #include "Homography.h"
 #include "Panorama.h"
-#include "Zone.h"
+#include "Correlation.h"
+#include "Dots.h"
 
 
 namespace Image_Stitching {
@@ -62,9 +61,6 @@ namespace Image_Stitching {
 	private: System::Windows::Forms::Label^ labelImg2Dot1;
 	private: System::Windows::Forms::Label^ labelResultS;
 
-
-
-
 	private:
 		/// <summary>
 		/// Required designer variable.
@@ -79,7 +75,7 @@ namespace Image_Stitching {
 		/// </summary>
 		/// 
 		BYTE* buffer1, * buffer2;
-		bool ilkSatir = true;
+		bool isFirstLine = true;
 		int currCornerID;
 		xy* currVec = new xy;
 		xy* prevVec = new xy;
@@ -87,7 +83,6 @@ namespace Image_Stitching {
 		xy* prevPanoSize = new xy;
 		xy* currPanoSize;
 		int lineCounter;
-		//Corner* corners;
 		BYTE2** LaplacePyramid1;
 		BYTE2** LaplacePyramid2;
 		BYTE* panorama1;
@@ -96,25 +91,21 @@ namespace Image_Stitching {
 		BYTE* intensity1;
 		BYTE* intensity2;
 
-		int selectedImages = 2;
-		double** outReal = new double* [selectedImages];
-		double** outImag = new double* [selectedImages];
+		double** outReal = new double* [2];
+		double** outImag = new double* [2];
 		double** match1 = new double* [3];
 		double** match2 = new double* [3];
-
 
 	private: System::Windows::Forms::Label^ imgIndexLbl;
 	private: System::Windows::Forms::Label^ label14;
 	private: System::Windows::Forms::Button^ saveButton;
-
-
 
 		   void FreePictureBox(PictureBox^ pictureBox) {
 			   delete[] pictureBox->Image;
 			   pictureBox->Image = nullptr;
 		   }
 
-		   void ShowImageColor(BYTE* Image, int width, int height) {
+		   void ShowColorImage(BYTE* Image, int width, int height) {
 
 			   FreePictureBox(pictureBox4);
 			   Bitmap^ surface = gcnew Bitmap(width, height, System::Drawing::Imaging::PixelFormat::Format24bppRgb);
@@ -153,24 +144,6 @@ namespace Image_Stitching {
 				   }
 		   }
 
-		   /*int NearestCornerIndex() {
-
-			   int minIndex;
-			   double dist;
-			   double min = 100000000000.0;
-
-			   for (int i = 0; i < 4; i++)
-			   {
-				   dist = corners[i].Distance(pocDot);
-				   if (dist < min) {
-					   min = dist;
-					   minIndex = i;
-				   }
-			   }
-
-			   return minIndex;
-		   }*/
-
 		   /*
 		   * cornerID
 		   *
@@ -207,7 +180,7 @@ namespace Image_Stitching {
 			   }
 		   }
 
-		   /*void ShowImage(BYTE* img1, BYTE* img2, int width, int height) {
+		   /*void ShowImageIntensity(BYTE* img1, BYTE* img2, int width, int height) {
 
 			   Bitmap^ surface1 = gcnew Bitmap(width, height);
 			   Bitmap^ surface2 = gcnew Bitmap(width, height);
@@ -467,7 +440,6 @@ namespace Image_Stitching {
 
 					outReal[1] = new double[width * height];
 					outImag[1] = new double[width * height];
-
 					FFT2D(intensity2, outReal[1], outImag[1], width, height);
 
 
@@ -479,25 +451,9 @@ namespace Image_Stitching {
 					delete[] outImag[0];
 					delete[] POC;
 
-					/*corners = (Corner*)malloc(sizeof(Corner) * 4);
-					corners[0] = Corner(0, 0);
-					corners[1] = Corner(width, 0);
-					corners[2] = Corner(0, height);
-					corners[3] = Corner(width, height);*/
-
-					/*
-					// POC noktasinin en yakin oldugu koseyi belirle
-					currCornerID = NearestCornerIndex();
-					// POC noktasinin, yakin oldugu koseye vektorunu hesapla
-					currVec = GetPOCDotVec(&corners[currCornerID], currCornerID, pocDot);
-
-					bool littleStep = IsLittleStep(intensity1, intensity2, width, height, currCornerID, currVec);
-					ShowImage(intensity1, intensity2, width, height);
-					if (!littleStep)
-						currCornerID = BigStepUpdate(currCornerID, currVec, width, height);*/
 
 					currCornerID = ZoneDetection(intensity1, intensity2, width, height, currVec, pocDot);
-					//ShowImage(intensity1, intensity2, width, height);
+					// ShowImageIntensity(intensity1, intensity2, width, height);
 					// Eksenlerce kesismeyen Random 4 nokta bul
 					xy* img1Dots = Rand4Dots(currCornerID, pocDot, width, height);
 
@@ -532,18 +488,18 @@ namespace Image_Stitching {
 						labelResultS->Text = currPanoSize->x + " x " + currPanoSize->y;
 
 						if (lineCounter == 0)
-							ilkSatir = true;
-						else ilkSatir = false;
+							isFirstLine = true;
+						else isFirstLine = false;
 
 
 						/*LaplacePyramid(homography, buffer1, buffer2, width, height, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						BYTE* r = P2(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, ilkSatir, currCornerID, prevVec, currVec);
-						ShowImageColor(r, width1, height1);
+						BYTE* r = P2(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						ShowColorImage(r, width1, height1);
 						delete[] r;*/
 
 						LaplacePyramid(homography, buffer1, buffer2, width, height, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						panorama1 = PanaromicImage(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, ilkSatir, currCornerID, prevVec, currVec);
-						//ShowImageColor(panorama1, currPanoSize->x, currPanoSize->y);
+						panorama1 = PanaromicImage(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						ShowColorImage(panorama1, currPanoSize->x, currPanoSize->y);
 
 						prevPanoSize->x = currPanoSize->x;
 						prevPanoSize->y = currPanoSize->y;
@@ -586,14 +542,6 @@ namespace Image_Stitching {
 					delete[] outImag[0];
 					delete[] POC;
 
-					/*currCornerID = NearestCornerIndex();
-					currVec = GetPOCDotVec(&corners[currCornerID], currCornerID, pocDot);
-
-					bool littleStep = IsLittleStep(intensity1, intensity2, width, height, currCornerID, currVec);
-					ShowImage(intensity1, intensity2, width, height);
-					if (!littleStep)
-						currCornerID = BigStepUpdate(currCornerID, currVec, width, height);
-					*/
 
 					currCornerID = ZoneDetection(intensity1, intensity2, width, height, currVec, pocDot);
 					xy* img1Dots = Rand4Dots(currCornerID, pocDot, width, height);
@@ -620,18 +568,18 @@ namespace Image_Stitching {
 						labelResultS->Text = currPanoSize->x + " x " + currPanoSize->y;
 
 						if (lineCounter == 0)
-							ilkSatir = true;
-						else ilkSatir = false;
+							isFirstLine = true;
+						else isFirstLine = false;
 
 
 						/*LaplacePyramid(homography, panorama1, buffer2, prevPanoSize->x, prevPanoSize->y, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						BYTE* r = P2(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, ilkSatir, currCornerID, prevVec, currVec);
-						ShowImageColor(r, width1, height1);
+						BYTE* r = P2(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						ShowColorImage(r, width1, height1);
 						delete[] r;*/
 
 						LaplacePyramid(homography, panorama1, buffer2, prevPanoSize->x, prevPanoSize->y, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						panorama2 = PanaromicImage(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, ilkSatir, currCornerID, prevVec, currVec);
-						//ShowImageColor(panorama2, currPanoSize->x, currPanoSize->y);
+						panorama2 = PanaromicImage(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						ShowColorImage(panorama2, currPanoSize->x, currPanoSize->y);
 						UpdatePrevVec(currCornerID, prevVec, currVec);
 
 
@@ -659,9 +607,8 @@ namespace Image_Stitching {
 				imgIndexLbl->Text = (imgCounter + 1).ToString();
 				imgIndexLbl->Refresh();
 			}
-			ShowImageColor(panorama1, prevPanoSize->x, prevPanoSize->y);
+			ShowColorImage(panorama1, prevPanoSize->x, prevPanoSize->y);
 			delete[] panorama1;
-			//free(corners);
 			for (size_t i = 0; i < 3; i++) {
 				delete[] match1[i];
 				delete[] match2[i];
