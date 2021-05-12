@@ -98,6 +98,8 @@ namespace Image_Stitching {
 
 	private: System::Windows::Forms::Label^ imgIndexLbl;
 	private: System::Windows::Forms::Label^ label14;
+
+
 	private: System::Windows::Forms::Button^ saveButton;
 
 		   void FreePictureBox(PictureBox^ pictureBox) {
@@ -376,7 +378,7 @@ namespace Image_Stitching {
 			   this->saveButton->UseVisualStyleBackColor = true;
 			   this->saveButton->Click += gcnew System::EventHandler(this, &Image_Stitching::saveButton_Click);
 			   // 
-			   // MyForm
+			   // Image_Stitching
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -397,7 +399,7 @@ namespace Image_Stitching {
 			   this->Controls->Add(this->menuStrip1);
 			   this->MainMenuStrip = this->menuStrip1;
 			   this->Margin = System::Windows::Forms::Padding(4);
-			   this->Name = L"MyForm";
+			   this->Name = L"Image_Stitching";
 			   this->Text = L"Image Stitching";
 			   this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			   this->menuStrip1->ResumeLayout(false);

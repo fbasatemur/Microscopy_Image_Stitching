@@ -958,10 +958,10 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				/*Zero Zone
 
 				p1********p3
-				***********
-				--*********
-				-----******
-				p2-----***p4 - OFFSET uygulanmasina gerek yok
+				**********!
+				--********!
+				-----*****!
+				p2-----!!!p4
 
 				*/
 
@@ -973,9 +973,20 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y = 0;
 					point4.y += yExtend;
 				}
+				else {
+					yExtend = currVec->y;
+				}
 
-				if (xExtend == 0) xExtend = currVec->x;
-				if (yExtend == 0) yExtend = currVec->y;
+				 if (xExtend == 0) {
+					xExtend = currVec->x;
+					if (point3.x != Width) {
+						point3.x -= OFFSET;
+						point4.x -= OFFSET;
+					}
+					point2.y -= OFFSET;
+					point4.y -= OFFSET;
+				}
+
 
 				int xStart = point1.x;
 				int xEnd = point3.x;
