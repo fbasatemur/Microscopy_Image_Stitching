@@ -1,4 +1,4 @@
-#include "Panorama.h"
+ï»¿#include "Panorama.h"
 #include <math.h>
 #include <omp.h>
 #define OFFSET 6
@@ -16,7 +16,7 @@ xy Transfer(double** H, int x, int y) {
 }
 
 xy* ReSizePanorama(double** H, int pano_Width, int pano_Height, int Width, int Height, xy& position) {
-	// Homoraphy matrisine dayalý birleþtirilerek oluþturulacak panaromik imgenin size belirlenir
+	// Homoraphy matrisine dayalÃ½ birleÃ¾tirilerek oluÃ¾turulacak panaromik imgenin size belirlenir
 	xy up_left, up_right, down_left, down_right, * Size = new xy;
 	int temp_Width, temp_Height;
 
@@ -28,7 +28,7 @@ xy* ReSizePanorama(double** H, int pano_Width, int pano_Height, int Width, int H
 	down_right = Transfer(H, Width, Height);
 	position.x = position.y = 0;
 
-	// --------- Imge sadece x ekseninin ters yönünde genisleme 
+	// --------- Imge sadece x ekseninin ters yÃ¶nÃ¼nde genisleme 
 	if ((up_left.x < 0) || (down_left.x < 0)) {
 		if (up_left.x < 0)
 			if (down_left.x < 0)
@@ -50,7 +50,7 @@ xy* ReSizePanorama(double** H, int pano_Width, int pano_Height, int Width, int H
 		}
 	}
 
-	// -----  Imge sadece  x ekseni yönünde geniþleme 
+	// -----  Imge sadece  x ekseni yÃ¶nÃ¼nde geniÃ¾leme 
 	if ((up_right.x > pano_Width) || (down_right.x > pano_Width)) {
 		if (up_right.x >= down_right.x)
 			temp_Width += (up_right.x - pano_Width);
@@ -58,7 +58,7 @@ xy* ReSizePanorama(double** H, int pano_Width, int pano_Height, int Width, int H
 			temp_Width += (down_right.x - pano_Width);
 	}
 
-	// ----   Imge sadece  y ekseninin ters yönünde geniþleme 
+	// ----   Imge sadece  y ekseninin ters yÃ¶nÃ¼nde geniÃ¾leme 
 	if ((up_left.y < 0) || (up_right.y < 0)) {
 		if (up_left.y < 0)
 			if (up_right.y < 0)
@@ -80,7 +80,7 @@ xy* ReSizePanorama(double** H, int pano_Width, int pano_Height, int Width, int H
 		}
 	}
 
-	//---------- Imge sadece  y eksen yönünde geniþleme 
+	//---------- Imge sadece  y eksen yÃ¶nÃ¼nde geniÃ¾leme 
 	if ((down_left.y > pano_Height) || (down_right.y > pano_Height)) {
 		if (down_left.y >= down_right.y)
 			temp_Height += ((down_left.y - pano_Height));
@@ -106,17 +106,17 @@ void LaplacePyramid(double** H, BYTE* panoramaImg1, BYTE* img2, int pano_Width, 
 	delete[] Raw1;
 	int twidth = width, theight = height;
 
-	BYTE* Gauss2;
+	BYTE* Gauss2 = nullptr;
 	Gauss2 = GaussPyramid(Gauss1, width, height, Gauss2);
 	BYTE2* Laplace1 = Difference(Gauss1, Gauss2, width, height);
 	delete[] Gauss1;
 
-	BYTE* Gauss3;
+	BYTE* Gauss3 = nullptr;
 	Gauss3 = GaussPyramid(Gauss2, width, height, Gauss3);
 	BYTE2* Laplace2 = Difference(Gauss2, Gauss3, width, height);
 	delete[] Gauss2;
 
-	BYTE2* Gauss4;
+	BYTE2* Gauss4 = nullptr;
 	Gauss4 = GaussPyramid(Gauss3, width, height, Gauss4);
 	BYTE2* Laplace3 = Difference(Gauss3, Gauss4, width, height);
 	delete[] Gauss3;
@@ -131,25 +131,25 @@ void LaplacePyramid(double** H, BYTE* panoramaImg1, BYTE* img2, int pano_Width, 
 
 	BYTE* Raw2 = ImageToResized(H, img2, Width, Height, newPanoSize, pano_position);
 
-	GoruntuDuzelt(Raw2, newPanoSize, img2, Width, Height); // Sebebi anlaþýlamadý sonra irdele
+	GoruntuDuzelt(Raw2, newPanoSize, img2, Width, Height); // Sebebi anlaÃ¾Ã½lamadÃ½ sonra irdele
 	width = newPanoSize.x;
 	height = newPanoSize.y;
 
 	//yeniden hesaplamaya gerek yok twidth, theight kadar genislet........
 	BYTE* Gauss1_ = BoyutGenislet(Raw2, width, height, newPanoSize.x, newPanoSize.y);
-	delete[] Raw2;		
+	delete[] Raw2;
 
-	BYTE* Gauss2_;
+	BYTE* Gauss2_ = nullptr;
 	Gauss2_ = GaussPyramid(Gauss1_, width, height, Gauss2_);
 	BYTE2* Laplace1_ = Difference(Gauss1_, Gauss2_, width, height);
 	delete[] Gauss1_;
 
-	BYTE* Gauss3_;
+	BYTE* Gauss3_ = nullptr;
 	Gauss3_ = GaussPyramid(Gauss2_, width, height, Gauss3_);
 	BYTE2* Laplace2_ = Difference(Gauss2_, Gauss3_, width, height);
 	delete[] Gauss2_;
 
-	BYTE2* Gauss4_;
+	BYTE2* Gauss4_ = nullptr;
 	Gauss4_ = GaussPyramid(Gauss3_, width, height, Gauss4_);
 	BYTE2* Laplace3_ = Difference(Gauss3_, Gauss4_, width, height);
 	delete[] Gauss3_;
@@ -165,82 +165,16 @@ void LaplacePyramid(double** H, BYTE* panoramaImg1, BYTE* img2, int pano_Width, 
 	height = theight;
 }
 
-//BYTE* L2(double** H, BYTE* panoramaImg1, BYTE* img2, int pano_Width, int pano_Height, int Width, int Height, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, xy newPanoSize, xy pano_position)
-//{
-//
-//	BYTE* Raw1 = PanoToResized(panoramaImg1, pano_Width, pano_Height, newPanoSize, pano_position);
-//	width = newPanoSize.x;
-//	height = newPanoSize.y;
-//
-//	BYTE* Gauss1 = BoyutGenislet(Raw1, width, height, newPanoSize.x, newPanoSize.y);
-//	delete[] Raw1;
-//	int twidth = width, theight = height;
-//
-//	BYTE* Gauss2 = GaussPyramid(Gauss1, width, height);
-//	BYTE2* Laplace1 = Difference(Gauss1, Gauss2, width, height);
-//	//delete[] Gauss1;
-//
-//	//BYTE* Gauss3 = GaussPyramid(Gauss2, width, height);
-//	//BYTE2* Laplace2 = Difference(Gauss2, Gauss3, width, height);
-//	//delete[] Gauss2;
-//
-//
-//	//BYTE2* Gauss4 = GaussPyramidBYTE2(Gauss3, width, height);
-//	//BYTE2* Laplace3 = Difference(Gauss3, Gauss4, width, height);
-//	//delete[] Gauss3;
-//
-//	//BYTE2* Laplace4 = Gauss4;
-//
-//	//LaplacePyramid1[0] = Laplace1;
-//	//LaplacePyramid1[1] = Laplace2;
-//	//LaplacePyramid1[2] = Laplace3;
-//	//LaplacePyramid1[3] = Laplace4;
-//
-//
-//	//BYTE* Raw2 = ImageToResized(H, img2, Width, Height, newPanoSize, pano_position);
-//
-//	//GoruntuDuzelt(Raw2, newPanoSize, img2, Width, Height); // Sebebi anlaþýlamadý sonra irdele 03.05.2019
-//	//width = newPanoSize.x;
-//	//height = newPanoSize.y;
-//
-//	////yeniden hesaplamaya gerek yok twidth, theight kadar genislet........
-//	//BYTE* Gauss1_ = BoyutGenislet(Raw2, width, height, newPanoSize.x, newPanoSize.y);
-//	////delete[] Raw2;
-//
-//	//BYTE* Gauss2_ = GaussPyramid(Gauss1_, width, height);
-//	//BYTE2* Laplace1_ = Difference(Gauss1_, Gauss2_, width, height);
-//	//delete[] Gauss1_;
-//
-//	//BYTE* Gauss3_ = GaussPyramid(Gauss2_, width, height);
-//	//BYTE2* Laplace2_ = Difference(Gauss2_, Gauss3_, width, height);
-//	//delete[] Gauss2_;
-//
-//	//BYTE2* Gauss4_ = GaussPyramidBYTE2(Gauss3_, width, height);
-//	//BYTE2* Laplace3_ = Difference(Gauss3_, Gauss4_, width, height);
-//	//delete[] Gauss3_;
-//
-//	//BYTE2* Laplace4_ = Gauss4_;
-//
-//	//LaplacePyramid2[0] = Laplace1_;
-//	//LaplacePyramid2[1] = Laplace2_;
-//	//LaplacePyramid2[2] = Laplace3_;
-//	//LaplacePyramid2[3] = Laplace4_;
-//
-//	//width = twidth;
-//	//height = theight;
-//	return Gauss1;
-//}//LaplacePyramid
-
 BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy position) {
 	//  Gelen imgeyi (Raw)  Birlesmesi ile olusacak Size.x * Size.y  boyutundaki imgeye pano imgesi olarak yerlestir: 
-	//  1. önce tüm piksellerine görüntünün ortalama RGB degerlerini yerleþtir,
-	//  2. Raw degiskeni ile gelen imgeyi Size.x * Size.y  boyutundaki imgedeki konumuna konuþlandirarak kopyala 
+	//  1. Ã¶nce tÃ¼m piksellerine gÃ¶rÃ¼ntÃ¼nÃ¼n ortalama RGB degerlerini yerleÃ¾tir,
+	//  2. Raw degiskeni ile gelen imgeyi Size.x * Size.y  boyutundaki imgedeki konumuna konuÃ¾landirarak kopyala 
 
 	int newPanoSizeX = newPanoSize.x;
 	int newPanoSizeY = newPanoSize.y;
 	int positionX = position.x;
 	int positionY = position.y;
-	int tempR = 0, tempG = 0, tempB = 0, bufpos;
+	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 	BYTE* panoImg = new BYTE[newPanoSizeX * newPanoSizeY * 3];
 	/*BYTE* panoImg = new BYTE[newPanoSizeX * newPanoSizeY * 3]();*/
 
@@ -263,7 +197,7 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 	tempG /= (Width * Height);
 	tempB /= (Width * Height);
 
-	// Gelen Raw daki imgenin R,G,B deðeri için hesaplanan bir ortalama deðeri geniþletlen imgenin tüm pikselllerine yazýlýr
+	// Gelen Raw daki imgenin R,G,B deÃ°eri iÃ§in hesaplanan bir ortalama deÃ°eri geniÃ¾letlen imgenin tÃ¼m pikselllerine yazÃ½lÃ½r
 #pragma omp parallel num_threads(NUM_THREADS) shared(newPanoSizeY, newPanoSizeX, panoImg, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) nowait
@@ -298,21 +232,19 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 }
 
 BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position) {
-	//  Gelen imgeyi (Raw)  Birleþmesi ile oluþacak sizeX * sizeY  boyutundaki imgeye pano imgesi olarak yerleþtir: 
-	//  1. önce tüm piksellerine görüntünün ortalama RGB deðerlerini yerleþtir,
-	//  2. Raw deðiþkeni ile gelen imgeyi sizeX * sizeY  boyutundaki imgedeki konumuna konuþlandýrarak kopyala 
+	//  Gelen imgeyi (Raw)  BirleÃ¾mesi ile oluÃ¾acak sizeX * sizeY  boyutundaki imgeye pano imgesi olarak yerleÃ¾tir: 
+	//  1. Ã¶nce tÃ¼m piksellerine gÃ¶rÃ¼ntÃ¼nÃ¼n ortalama RGB deÃ°erlerini yerleÃ¾tir,
+	//  2. Raw deÃ°iÃ¾keni ile gelen imgeyi sizeX * sizeY  boyutundaki imgedeki konumuna konuÃ¾landÃ½rarak kopyala 
 
 	int sizeX = Size.x;
 	int sizeY = Size.y;
 	int positionX = position.x;
 	int positionY = position.y;
 
-	int tempR = 0, tempG = 0, tempB = 0;
-	size_t bufpos;
+	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 	BYTE* resizedImg = new BYTE[sizeX * sizeY * 3];
 
-
-	// Imgedeki RGB deðerleri ortalamasý hesaplanýyor
+	// Imgedeki RGB deÃ°erleri ortalamasÃ½ hesaplanÃ½yor
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, Raw, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR, tempG, tempB) nowait
@@ -330,25 +262,25 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 	tempG /= (Width * Height);
 	tempB /= (Width * Height);
 
-	// Gelen Raw daki imgenin R,G,B deðeri için hesaplanan bir ortalama deðeri geniþletlen imgenin tüm pikselllerine yazýlýr
+	// Gelen Raw daki imgenin R,G,B deÃ°eri iÃ§in hesaplanan bir ortalama deÃ°eri geniÃ¾letlen imgenin tÃ¼m pikselllerine yazÃ½lÃ½r
 #pragma omp parallel num_threads(NUM_THREADS) shared(sizeY, sizeX, resizedImg, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) nowait
 		for (int i = 0; i < sizeY; i++) {
 			for (int j = 0; j < sizeX; j++) {
 				bufpos = (sizeY - i - 1) * sizeX * 3 + j * 3;
-				resizedImg[bufpos + 2] = (BYTE)tempR;
-				resizedImg[bufpos + 1] = (BYTE)tempG;
-				resizedImg[bufpos] = (BYTE)tempB;
+				resizedImg[bufpos + 2] = BYTE(tempR);
+				resizedImg[bufpos + 1] = BYTE(tempG);
+				resizedImg[bufpos] = BYTE(tempB);
 			}
 		}
 	}
-	
+
 
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, sizeY, positionY, sizeX, positionX, Raw, resizedImg)
 	{
 		xy point;
-		int buf, rawBuf;
+		int buf; size_t rawBuf;
 #pragma omp for schedule(dynamic) nowait
 		for (int i = 0; i < Height; i++) {
 			for (int j = 0; j < Width; j++) {
@@ -369,18 +301,18 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 }
 
 BYTE* BoyutAyarla(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position, int img) {
-	// img  etiketi ile gelecek 1 veya 2 nolu imgeleri, Birleþmesi ile oluþacak sizeX * sizeY  boyutundaki imgeye : 
-	//  1. önce tüm piksellerine görüntünün ortalama RGB deðerlerini yerleþtir,
-	//  2. Raw deðiþkeni ile gelen imgeyi sizeX * sizeY  boyutundaki imgedeki konumuna konuþlandýrarak kopyala 
+	// img  etiketi ile gelecek 1 veya 2 nolu imgeleri, BirleÃ¾mesi ile oluÃ¾acak sizeX * sizeY  boyutundaki imgeye : 
+	//  1. Ã¶nce tÃ¼m piksellerine gÃ¶rÃ¼ntÃ¼nÃ¼n ortalama RGB deÃ°erlerini yerleÃ¾tir,
+	//  2. Raw deÃ°iÃ¾keni ile gelen imgeyi sizeX * sizeY  boyutundaki imgedeki konumuna konuÃ¾landÃ½rarak kopyala 
 
 	int sizeX = Size.x;
 	int sizeY = Size.y;
 	int positionX = position.x;
 	int positionY = position.y;
-	int tempR = 0, tempG = 0, tempB = 0, bufpos;
+	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 	BYTE* yeni = new BYTE[sizeX * sizeY * 3];
 
-	// Imgedeki RGB deðerleri ortalamasý hesaplanýyor
+	// Imgedeki RGB deÃ°erleri ortalamasÃ½ hesaplanÃ½yor
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR,tempG,tempB) nowait
@@ -398,16 +330,16 @@ BYTE* BoyutAyarla(double** H, BYTE* Raw, int Width, int Height, xy Size, xy posi
 	tempG /= (Width * Height);
 	tempB /= (Width * Height);
 
-	// Gelen Raw daki imgenin R,G,B deðeri için hesaplanan bir ortalama deðeri geniþletlen imgenin tüm pikselllerine yazýlýr
+	// Gelen Raw daki imgenin R,G,B deÃ°eri iÃ§in hesaplanan bir ortalama deÃ°eri geniÃ¾letlen imgenin tÃ¼m pikselllerine yazÃ½lÃ½r
 #pragma omp parallel num_threads(NUM_THREADS) shared(sizeX, sizeY, tempR, tempG, tempB, yeni) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) nowait
 		for (int i = 0; i < sizeY; i++) {
 			for (int j = 0; j < sizeX; j++) {
 				bufpos = (sizeY - i - 1) * sizeX * 3 + j * 3;
-				yeni[bufpos + 2] = tempR;
-				yeni[bufpos + 1] = tempG;
-				yeni[bufpos] = tempB;
+				yeni[bufpos + 2] = BYTE(tempR);
+				yeni[bufpos + 1] = BYTE(tempG);
+				yeni[bufpos] = BYTE(tempB);
 			}
 		}
 	}
@@ -435,14 +367,15 @@ BYTE* BoyutAyarla(double** H, BYTE* Raw, int Width, int Height, xy Size, xy posi
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, sizeX, sizeY, positionX, positionY, yeni, Raw)
 		{
 			xy point;
-			int yeniPos, rawPos;
+			int yeniPos;
+			size_t rawPos;
 #pragma omp for schedule(dynamic) nowait
 			for (int i = 0; i < Height; i++) {
 				for (int j = 0; j < Width; j++) {
 					point = Transfer(H, j, i);
 					yeniPos = (sizeY - (positionY + point.y) - 1) * sizeX * 3 + (point.x + positionX) * 3;
-					rawPos = (Height - i - 1) * Width * 3 + j * 3;
 					if (yeniPos > 0) {
+						rawPos = (Height - i - 1) * Width * 3 + j * 3;
 						yeni[yeniPos] = Raw[rawPos];
 						yeni[yeniPos + 1] = Raw[rawPos + 1];
 						yeni[yeniPos + 2] = Raw[rawPos + 2];
@@ -457,7 +390,7 @@ BYTE* BoyutAyarla(double** H, BYTE* Raw, int Width, int Height, xy Size, xy posi
 
 BYTE* BoyutGenislet(BYTE* Raw, int% width, int% height, int Width, int Height) {
 
-	// görüntünün boyu 2N+1 x 2N+1 olacak sekilde ayarlanýr
+	// gÃ¶rÃ¼ntÃ¼nÃ¼n boyu 2N+1 x 2N+1 olacak sekilde ayarlanÃ½r
 	bool temp = true;
 	if (width >= height) {
 		int n = 2;
@@ -518,15 +451,14 @@ BYTE* BoyutGenislet(BYTE* Raw, int% width, int% height, int Width, int Height) {
 template<typename T>
 T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 {
-	int Filtre[5][5] = { {1,4,7,4,1},
+	BYTE Filtre[5][5] = { {1,4,7,4,1},
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
 							{1,4,7,4,1} }; // 273
 
 	BYTE* Smooth = new BYTE[width * height * 3];
-	size_t bufpos;
-	int temp1 = 0, temp2 = 0, temp3 = 0;
+	size_t temp1 = 0, temp2 = 0, temp3 = 0, bufpos;
 
 #pragma omp parallel num_threads(NUM_THREADS) firstprivate(bufpos, temp1, temp2, temp3)
 	{
@@ -537,9 +469,9 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 			{
 				if (i <= 1 || i >= height - 2 || j <= 1 || j >= width - 2) {
 					bufpos = (height - i - 1) * width * 3 + j * 3;
-					Smooth[bufpos] = 255;
-					Smooth[bufpos + 1] = 255;
-					Smooth[bufpos + 2] = 255;
+					Smooth[bufpos] = BYTE(255);
+					Smooth[bufpos + 1] = BYTE(255);
+					Smooth[bufpos + 2] = BYTE(255);
 				}
 				else
 				{
@@ -548,18 +480,18 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 						for (int y = -2; y <= 2; y++)
 						{
 							bufpos = (height - (i + x) - 1) * width * 3 + (j + y) * 3;
-							temp1 += (Filtre[x + 2][y + 2] * (int)Raw[bufpos]);
-							temp2 += (Filtre[x + 2][y + 2] * (int)Raw[bufpos + 1]);
-							temp3 += (Filtre[x + 2][y + 2] * (int)Raw[bufpos + 2]);
+							temp1 += size_t(Filtre[x + 2][y + 2] * Raw[bufpos]);
+							temp2 += size_t(Filtre[x + 2][y + 2] * Raw[bufpos + 1]);
+							temp3 += size_t(Filtre[x + 2][y + 2] * Raw[bufpos + 2]);
 						}
 					}
 					temp1 /= 273;
 					temp2 /= 273;
 					temp3 /= 273;
 					bufpos = (height - i - 1) * width * 3 + j * 3;
-					Smooth[bufpos] = temp1;
-					Smooth[bufpos + 1] = temp2;
-					Smooth[bufpos + 2] = temp3;
+					Smooth[bufpos] = BYTE(temp1);
+					Smooth[bufpos + 1] = BYTE(temp2);
+					Smooth[bufpos + 2] = BYTE(temp3);
 				}
 			}
 		}
@@ -576,9 +508,9 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 			gaussPos = (newHeight - x - 1) * newWidth * 3 + y * 3;
 			smoothPos = (height - i - 1) * width * 3 + j * 3;
 
-			result[gaussPos + 2] = Smooth[smoothPos + 2];
-			result[gaussPos + 1] = Smooth[smoothPos + 1];
-			result[gaussPos] = Smooth[smoothPos];
+			result[gaussPos + 2] = (T)Smooth[smoothPos + 2];
+			result[gaussPos + 1] = (T)Smooth[smoothPos + 1];
+			result[gaussPos] = (T)Smooth[smoothPos];
 		}
 	}
 
@@ -596,7 +528,7 @@ BYTE2* Difference(BYTE* Gauss1, T* Gauss2, int width, int height) {
 	width = ((width - 1) * 2) + 1;
 	height = ((height - 1) * 2) + 1;
 
-	int bufpos;
+	size_t bufpos;
 	BYTE2* Laplace = new BYTE2[width * height * 3];
 
 #pragma omp parallel num_threads(NUM_THREADS) shared(Gauss1, ExpandGauss, Laplace, height, width) private(bufpos)
@@ -606,9 +538,9 @@ BYTE2* Difference(BYTE* Gauss1, T* Gauss2, int width, int height) {
 			for (int j = 0; j < width; j++) {
 				bufpos = (height - i - 1) * width * 3 + j * 3;
 
-				Laplace[bufpos + 2] = (BYTE2)Gauss1[bufpos + 2] - ExpandGauss[bufpos + 2];
-				Laplace[bufpos + 1] = (BYTE2)Gauss1[bufpos + 1] - ExpandGauss[bufpos + 1];
-				Laplace[bufpos] = (BYTE2)Gauss1[bufpos] - ExpandGauss[bufpos];
+				Laplace[bufpos + 2] = BYTE2(Gauss1[bufpos + 2]) - ExpandGauss[bufpos + 2];
+				Laplace[bufpos + 1] = BYTE2(Gauss1[bufpos + 1]) - ExpandGauss[bufpos + 1];
+				Laplace[bufpos] = BYTE2(Gauss1[bufpos]) - ExpandGauss[bufpos];
 			}
 		}
 	}
@@ -624,7 +556,7 @@ BYTE2* Expand(T* Gauss, int width, int height)
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
-							{1,4,7,4,1} }; // /273
+							{1,4,7,4,1} }; //273
 
 	int newwidth = ((width - 1) * 2) + 1;
 	int newheight = ((height - 1) * 2) + 1;
@@ -667,9 +599,9 @@ BYTE2* Expand(T* Gauss, int width, int height)
 				temp2 /= 273;
 				temp3 /= 273;
 				bufpos = (newheight - i - 1) * newwidth * 3 + j * 3;
-				Expand[bufpos] = temp1 * 4;
-				Expand[bufpos + 1] = temp2 * 4;
-				Expand[bufpos + 2] = temp3 * 4;
+				Expand[bufpos] = BYTE2(temp1 * 4);
+				Expand[bufpos + 1] = BYTE2(temp2 * 4);
+				Expand[bufpos + 2] = BYTE2(temp3 * 4);
 			}
 		}
 	}
@@ -679,7 +611,7 @@ BYTE2* Expand(T* Gauss, int width, int height)
 
 void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 
-	int tempR = 0, tempG = 0, tempB = 0, bufpos;
+	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, tempRaw, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR, tempG, tempB) nowait
@@ -694,9 +626,9 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 		}
 	}
 
-	tempR /= (Width * Height);
-	tempG /= (Width * Height);
-	tempB /= (Width * Height);
+	BYTE meanR = BYTE(tempR / (Width * Height));
+	BYTE meanG = BYTE(tempG / (Width * Height));
+	BYTE meanB = BYTE(tempB / (Width * Height));
 
 	int sizeX = Size.x;
 	int sizeY = Size.y;
@@ -708,7 +640,7 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 			for (int j = 1; j < sizeX - 1; j++) {
 				bufpos = (sizeY - i - 1) * sizeX * 3 + j * 3;
 
-				if (((BYTE)tempR == Raw[bufpos + 2]) && ((BYTE)tempG == Raw[bufpos + 1]) && ((BYTE)tempB == Raw[bufpos])) {
+				if ((meanR == Raw[bufpos + 2]) && (meanG == Raw[bufpos + 1]) && (meanB == Raw[bufpos])) {
 					Raw[bufpos + 2] = GetMeanPiksel(Raw, i, j, Size, 1);
 					Raw[bufpos + 1] = GetMeanPiksel(Raw, i, j, Size, 2);
 					Raw[bufpos] = GetMeanPiksel(Raw, i, j, Size, 3);
@@ -720,7 +652,7 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 }
 
 BYTE GetMeanPiksel(BYTE* Raw, int i, int j, xy Size, int rgb) {
-	BYTE piksel[9], temp, bufpos;
+	BYTE piksel[9], temp;
 
 	if (rgb == 1) {
 		piksel[0] = Raw[(Size.y - (i - 1) - 1) * Size.x * 3 + (j - 1) * 3 + 2];
@@ -810,13 +742,7 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 	xy point3 = Transfer(H, orWidth, 0);		// 2. goruntunun bitis sag_ust
 	xy point4 = Transfer(H, orWidth, orHeight); // 2. goruntunun bitis sag_alt
 
-	int bufpos, tempcoor, tempcoor2;
-	xy coor1, coor2;
-	int xlenght, ylenght;
-	double xrate, yrate;
-	double xtemp, ytemp;
-	bool change = false;
-
+	size_t bufpos;
 
 	/*
 	* currCornerID
@@ -879,8 +805,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			double xRate = xLength / yLength;
 
 			int xTemp = 0, yTemp = 0;
-			for (size_t row = yStart; row <= yEnd; row++) {
-				for (size_t col = xStart + xTemp; col <= point4.x; col++)
+			for (int row = yStart; row <= yEnd; row++) {
+				for (int col = xStart + xTemp; col <= point4.x; col++)
 				{
 					bufpos = (height - row - 1) * width * 3 + col * 3;
 					Raw[bufpos + 2] = 0;
@@ -929,8 +855,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int yStart = point1.y + yExtend;
 				int yEnd = point2.y;
 
-				for (size_t row = point1.y; row < yStart; row++) {
-					for (size_t col = xStart; col <= xEnd; col++)
+				for (int row = point1.y; row < yStart; row++) {
+					for (int col = xStart; col <= xEnd; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -939,8 +865,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 
-				for (size_t row = yStart; row <= yEnd; row++) {
-					for (size_t col = xStart + xTemp; col <= xEnd - xTemp; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart + xTemp; col <= xEnd - xTemp; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -977,7 +903,7 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					yExtend = currVec->y;
 				}
 
-				 if (xExtend == 0) {
+				if (xExtend == 0) {
 					xExtend = currVec->x;
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
@@ -998,8 +924,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double xRate = xLength / yLength;
 				int xTemp = 0, yTemp = 0;
 
-				for (size_t row = point1.y; row < yStart; row++) {
-					for (size_t col = point1.x; col <= point3.x; col++)
+				for (int row = point1.y; row < yStart; row++) {
+					for (int col = point1.x; col <= point3.x; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1008,8 +934,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 
-				for (size_t row = yStart; row <= yEnd; row++) {
-					for (size_t col = xStart + xTemp; col <= xEnd; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart + xTemp; col <= xEnd; col++)
 					{
 						if (col >= point1.x) {
 
@@ -1033,7 +959,7 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				***********
 				********---
 				******-----
-				p2**------p4 - OFFSET uygulanmasina gerek yok
+				p2**------p4 - DURUMA GORE OFFSET UYGULANIR
 
 				*/
 
@@ -1085,8 +1011,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double yLength = point2.y - yStart - yExtend;
 				double xRate = xLength / yLength;
 
-				for (size_t row = yStart; row < yEnd; row++) {
-					for (size_t col = xStart; col <= point3.x; col++)
+				for (int row = yStart; row < yEnd; row++) {
+					for (int col = xStart; col <= point3.x; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1095,12 +1021,12 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 
-				int xTemp = 0, yTemp = yLength;
-				for (size_t row = yEnd; row <= point2.y; row++) {
+				int xTemp = 0, yTemp = int(yLength);
+				for (int row = yEnd; row <= point2.y; row++) {
 
 					yTemp--;
 					xTemp = int(xRate * yTemp);
-					for (size_t col = xStart; col <= xEnd + xTemp; col++)
+					for (int col = xStart; col <= xEnd + xTemp; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1151,12 +1077,12 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			double yLength = point2.y - yStart;
 			double xRate = xLength / yLength;
 
-			int xTemp = 0, yTemp = yLength;
-			for (size_t row = yStart; row <= yEnd; row++) {
+			int xTemp = 0, yTemp = int(yLength);
+			for (int row = yStart; row <= yEnd; row++) {
 
 				yTemp--;
 				xTemp = int(xRate * yTemp);
-				for (size_t col = xStart; col <= xEnd + xTemp; col++)
+				for (int col = xStart; col <= xEnd + xTemp; col++)
 				{
 					bufpos = (height - row - 1) * width * 3 + col * 3;
 					Raw[bufpos + 2] = 0;
@@ -1190,25 +1116,34 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 				/*Zero Zone
 
-				p1------!!p3 - YUKARI VE SAGA OFFSET UYGULANIR
+				p1------!!p3 - YUKARI, SAGA ve ASAGI OFFSET UYGULANIR
 				-------***!
 				------****!
 				-----*****!
-				p2--******p4
+				p2--!!!!!!p4
 
 				*/
 
 				int xExtend = abs(newSize.x - Width);
+
 				if (xExtend == 0) {
-					// saga genisleme yoksa OFFSET uygulansin
+					// saga genisleme yoksa sag kenara da OFFSET uygulansin
 					xExtend = currVec->x;
-					point1.y += OFFSET;
-					point3.y += OFFSET;
+					
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
 					}
 				}
+
+				point1.y += OFFSET;
+				point3.y += OFFSET;
+
+				if (point2.y != Height) {
+					point2.y -= OFFSET;
+					point4.y -= OFFSET;
+				}
+				
 
 				int xStart = point3.x - xExtend;
 				int xEnd = point3.x;
@@ -1220,8 +1155,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double xRate = xLength / yLength;
 
 				int xTemp = 0, yTemp = 0;
-				for (size_t row = yStart + 10; row <= yEnd; row++) {
-					for (size_t col = xStart - xTemp; col <= xEnd; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart - xTemp; col <= xEnd; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1286,8 +1221,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double xRate = xLength / yLength;
 
 				int xTemp = 0, yTemp = 0;
-				for (size_t row = yStart; row <= yEnd; row++) {
-					for (size_t col = xStart; col <= xEnd + xTemp; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart; col <= xEnd + xTemp; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1339,13 +1274,13 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double xRate = xLength / yLength;
 				int xTemp = 0, yTemp = 0;
 
-				int xStart = point1.x + xLength;
-				int xEnd = point1.x + xLength;
+				int xStart = point1.x + int(xLength);
+				int xEnd = point1.x + int(xLength);
 				int yStart = point1.y;
-				int yEnd = point1.y + yLength;
+				int yEnd = point1.y + int(yLength);
 
-				for (size_t row = yStart; row < yEnd; row++) {
-					for (size_t col = xStart - xTemp; col <= xEnd + xTemp; col++)
+				for (int row = yStart; row < yEnd; row++) {
+					for (int col = xStart - xTemp; col <= xEnd + xTemp; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1356,8 +1291,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					xTemp = int(xRate * yTemp);
 				}
 
-				for (size_t row = yEnd; row <= point2.y; row++) {
-					for (size_t col = point1.x; col <= point3.x; col++)
+				for (int row = yEnd; row <= point2.y; row++) {
+					for (int col = point1.x; col <= point3.x; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1401,8 +1336,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int yStart = point1.y + currVec->y;
 				int yEnd = point2.y;
 
-				for (size_t row = point1.y; row < yStart; row++) {
-					for (size_t col = 0; col <= xEnd; col++) {
+				for (int row = point1.y; row < yStart; row++) {
+					for (int col = xStart; col <= xEnd; col++) {
 
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1412,8 +1347,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 
-				for (size_t row = yStart; row <= yEnd; row++) {
-					for (size_t col = xStart + xTemp; col <= xEnd - xTemp; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart + xTemp; col <= xEnd - xTemp; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1478,8 +1413,6 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 				else {
 					// goruntu saga ve asagi genislemezse her yone OFFSET uygulansin
-					xExtend = currVec->x;
-					yExtend = currVec->y;
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1498,10 +1431,10 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 
-				int xStart = point3.x - xExtend;
+				int xStart = point3.x - currVec->x;
 				int xEnd = point3.x;
 				int yStart = point3.y;
-				int yEnd = point4.y - yExtend;
+				int yEnd = point4.y - currVec->y;
 
 				double xLength = xStart - point1.x;
 				double yLength = yEnd - yStart;
@@ -1511,13 +1444,11 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				for (size_t row = yStart; row < yEnd; row++) {
 					for (size_t col = xStart - xTemp; col <= xEnd; col++)
 					{
-						if (col >= point1.x) {
 
-							bufpos = (height - row - 1) * width * 3 + col * 3;
-							Raw[bufpos + 2] = 0;
-							Raw[bufpos + 1] = 0;
-							Raw[bufpos] = 0;
-						}
+						bufpos = (height - row - 1) * width * 3 + col * 3;
+						Raw[bufpos + 2] = 0;
+						Raw[bufpos + 1] = 0;
+						Raw[bufpos] = 0;
 					}
 					yTemp++;
 					xTemp = int(xRate * yTemp);
@@ -1699,8 +1630,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				double xRate = xLength / yLength;
 				int xTemp = 0, yTemp = 0;
 
-				for (size_t row = point1.y; row < yStart; row++) {
-					for (size_t col = point1.x; col <= point3.x; col++)
+				for (int row = point1.y; row < yStart; row++) {
+					for (int col = point1.x; col <= point3.x; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1709,8 +1640,8 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 
-				for (size_t row = yStart; row <= yEnd; row++) {
-					for (size_t col = xStart + xTemp; col <= xEnd; col++)
+				for (int row = yStart; row <= yEnd; row++) {
+					for (int col = xStart + xTemp; col <= xEnd; col++)
 					{
 						bufpos = (height - row - 1) * width * 3 + col * 3;
 						Raw[bufpos + 2] = 0;
@@ -1797,7 +1728,7 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 
-				int xTemp = 0, yTemp = yLength;
+				int xTemp = 0, yTemp = int(yLength);
 				for (size_t row = yEnd; row <= point2.y; row++) {
 
 					yTemp--;
@@ -1817,7 +1748,7 @@ BYTE* Filtre(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 	return Raw;
 }//Filtre
 
-BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* prevVec, xy* currVec) 
+BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* prevVec, xy* currVec)
 {
 	int bufpos1, bufpos2;
 	BYTE* M = new BYTE[width * height * 3];
@@ -1828,7 +1759,7 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 		for (int i = 0; i < height * width * 3; i++)
 			M[i] = 255;
 	}
-	
+
 	M = Filtre(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, prevVec, currVec);
 
 	BYTE* MGauss1 = M;
@@ -1839,15 +1770,15 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				bufpos1 = (height - i - 1) * width * 3 + j * 3;
-				SLaplace1[bufpos1 + 2] = LaplacePyramid1[0][bufpos1 + 2] * (MGauss1[bufpos1 + 2] / 255.0) + LaplacePyramid2[0][bufpos1 + 2] * ((255 - MGauss1[bufpos1 + 2]) / 255.0);
-				SLaplace1[bufpos1 + 1] = LaplacePyramid1[0][bufpos1 + 1] * (MGauss1[bufpos1 + 1] / 255.0) + LaplacePyramid2[0][bufpos1 + 1] * ((255 - MGauss1[bufpos1 + 1]) / 255.0);
-				SLaplace1[bufpos1] = LaplacePyramid1[0][bufpos1] * (MGauss1[bufpos1] / 255.0) + LaplacePyramid2[0][bufpos1] * ((255 - MGauss1[bufpos1]) / 255.0);
+				SLaplace1[bufpos1 + 2] = BYTE2(LaplacePyramid1[0][bufpos1 + 2] * (MGauss1[bufpos1 + 2] / 255.0) + LaplacePyramid2[0][bufpos1 + 2] * ((255 - MGauss1[bufpos1 + 2]) / 255.0));
+				SLaplace1[bufpos1 + 1] = BYTE2(LaplacePyramid1[0][bufpos1 + 1] * (MGauss1[bufpos1 + 1] / 255.0) + LaplacePyramid2[0][bufpos1 + 1] * ((255 - MGauss1[bufpos1 + 1]) / 255.0));
+				SLaplace1[bufpos1] = BYTE2(LaplacePyramid1[0][bufpos1] * (MGauss1[bufpos1] / 255.0) + LaplacePyramid2[0][bufpos1] * ((255 - MGauss1[bufpos1]) / 255.0));
 			}
 		}
 	}
 
 	// OverMemoryUsing probleminden dolayi LaplacePyramid lerin submemory adresleri kullanildiktan sonra dealloc edilir
-	BYTE* MGauss2;
+	BYTE* MGauss2 = nullptr;
 	MGauss2 = GaussPyramid(MGauss1, width, height, MGauss2);
 	delete[] MGauss1;
 	delete[] LaplacePyramid1[0];
@@ -1860,14 +1791,14 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				bufpos1 = (height - i - 1) * width * 3 + j * 3;
-				SLaplace2[bufpos1 + 2] = LaplacePyramid1[1][bufpos1 + 2] * (MGauss2[bufpos1 + 2] / 255.0) + LaplacePyramid2[1][bufpos1 + 2] * ((255 - MGauss2[bufpos1 + 2]) / 255.0);
-				SLaplace2[bufpos1 + 1] = LaplacePyramid1[1][bufpos1 + 1] * (MGauss2[bufpos1 + 1] / 255.0) + LaplacePyramid2[1][bufpos1 + 1] * ((255 - MGauss2[bufpos1 + 1]) / 255.0);
-				SLaplace2[bufpos1] = LaplacePyramid1[1][bufpos1] * (MGauss2[bufpos1] / 255.0) + LaplacePyramid2[1][bufpos1] * ((255 - MGauss2[bufpos1]) / 255.0);
+				SLaplace2[bufpos1 + 2] = BYTE2(LaplacePyramid1[1][bufpos1 + 2] * (MGauss2[bufpos1 + 2] / 255.0) + LaplacePyramid2[1][bufpos1 + 2] * ((255 - MGauss2[bufpos1 + 2]) / 255.0));
+				SLaplace2[bufpos1 + 1] = BYTE2(LaplacePyramid1[1][bufpos1 + 1] * (MGauss2[bufpos1 + 1] / 255.0) + LaplacePyramid2[1][bufpos1 + 1] * ((255 - MGauss2[bufpos1 + 1]) / 255.0));
+				SLaplace2[bufpos1] = BYTE2(LaplacePyramid1[1][bufpos1] * (MGauss2[bufpos1] / 255.0) + LaplacePyramid2[1][bufpos1] * ((255 - MGauss2[bufpos1]) / 255.0));
 			}
 		}
 	}
 
-	BYTE* MGauss3;
+	BYTE* MGauss3 = nullptr;
 	MGauss3 = GaussPyramid(MGauss2, width, height, MGauss3);
 	delete[] MGauss2;
 	delete[] LaplacePyramid1[1];
@@ -1880,15 +1811,15 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				bufpos1 = (height - i - 1) * width * 3 + j * 3;
-				SLaplace3[bufpos1 + 2] = LaplacePyramid1[2][bufpos1 + 2] * (MGauss3[bufpos1 + 2] / 255.0) + LaplacePyramid2[2][bufpos1 + 2] * ((255 - MGauss3[bufpos1 + 2]) / 255.0);
-				SLaplace3[bufpos1 + 1] = LaplacePyramid1[2][bufpos1 + 1] * (MGauss3[bufpos1 + 1] / 255.0) + LaplacePyramid2[2][bufpos1 + 1] * ((255 - MGauss3[bufpos1 + 1]) / 255.0);
-				SLaplace3[bufpos1] = LaplacePyramid1[2][bufpos1] * (MGauss3[bufpos1] / 255.0) + LaplacePyramid2[2][bufpos1] * ((255 - MGauss3[bufpos1]) / 255.0);
+				SLaplace3[bufpos1 + 2] = BYTE2(LaplacePyramid1[2][bufpos1 + 2] * (MGauss3[bufpos1 + 2] / 255.0) + LaplacePyramid2[2][bufpos1 + 2] * ((255 - MGauss3[bufpos1 + 2]) / 255.0));
+				SLaplace3[bufpos1 + 1] = BYTE2(LaplacePyramid1[2][bufpos1 + 1] * (MGauss3[bufpos1 + 1] / 255.0) + LaplacePyramid2[2][bufpos1 + 1] * ((255 - MGauss3[bufpos1 + 1]) / 255.0));
+				SLaplace3[bufpos1] = BYTE2(LaplacePyramid1[2][bufpos1] * (MGauss3[bufpos1] / 255.0) + LaplacePyramid2[2][bufpos1] * ((255 - MGauss3[bufpos1]) / 255.0));
 
 			}
 		}
 	}
 
-	BYTE* MGauss4;
+	BYTE* MGauss4 = nullptr;
 	MGauss4 = GaussPyramid(MGauss3, width, height, MGauss4);
 	delete[] MGauss3;
 	delete[] LaplacePyramid1[2];
@@ -1901,9 +1832,9 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				bufpos1 = (height - i - 1) * width * 3 + j * 3;
-				SLaplace4[bufpos1 + 2] = LaplacePyramid1[3][bufpos1 + 2] * (MGauss4[bufpos1 + 2] / 255.0) + LaplacePyramid2[3][bufpos1 + 2] * ((255 - MGauss4[bufpos1 + 2]) / 255.0);
-				SLaplace4[bufpos1 + 1] = LaplacePyramid1[3][bufpos1 + 1] * (MGauss4[bufpos1 + 1] / 255.0) + LaplacePyramid2[3][bufpos1 + 1] * ((255 - MGauss4[bufpos1 + 1]) / 255.0);
-				SLaplace4[bufpos1] = LaplacePyramid1[3][bufpos1] * (MGauss4[bufpos1] / 255.0) + LaplacePyramid2[3][bufpos1] * ((255 - MGauss4[bufpos1]) / 255.0);
+				SLaplace4[bufpos1 + 2] = BYTE2(LaplacePyramid1[3][bufpos1 + 2] * (MGauss4[bufpos1 + 2] / 255.0) + LaplacePyramid2[3][bufpos1 + 2] * ((255 - MGauss4[bufpos1 + 2]) / 255.0));
+				SLaplace4[bufpos1 + 1] = BYTE2(LaplacePyramid1[3][bufpos1 + 1] * (MGauss4[bufpos1 + 1] / 255.0) + LaplacePyramid2[3][bufpos1 + 1] * ((255 - MGauss4[bufpos1 + 1]) / 255.0));
+				SLaplace4[bufpos1] = BYTE2(LaplacePyramid1[3][bufpos1] * (MGauss4[bufpos1] / 255.0) + LaplacePyramid2[3][bufpos1] * ((255 - MGauss4[bufpos1]) / 255.0));
 
 			}
 		}
@@ -1941,7 +1872,7 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 	int sizeX = Size.x;
 	int sizeY = Size.y;
 	BYTE* panorama = new BYTE[sizeX * sizeY * 3];
-	
+
 #pragma omp parallel shared(sizeX, sizeY, width, height, panorama, SLaplace1) private(bufpos1, bufpos2)
 	{
 #pragma omp for schedule(dynamic) nowait
@@ -1968,7 +1899,6 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 //	BYTE* M = new BYTE[width * height * 3];
 //	for (i = 0; i < height * width * 3; i++)
 //		M[i] = 255;
-//
 //
 //	M = Filtre(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, prevVec, currVec);
 //

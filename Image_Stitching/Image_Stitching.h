@@ -115,6 +115,7 @@ namespace Image_Stitching {
 			   pictureBox4->Height = height;
 			   pictureBox4->Image = surface;
 
+			   // buffer image incele
 			   Color c;
 			   int psw, bufpos, row, column;
 			   psw = width * 3;
@@ -493,7 +494,7 @@ namespace Image_Stitching {
 							isFirstLine = true;
 						else isFirstLine = false;
 
-
+						// Maskelenen bolgelerini gormek icin debug fonksiyonu
 						/*LaplacePyramid(homography, buffer1, buffer2, width, height, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
 						BYTE* r = P2(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
 						ShowColorImage(r, width1, height1);
@@ -573,7 +574,7 @@ namespace Image_Stitching {
 							isFirstLine = true;
 						else isFirstLine = false;
 
-
+						// Maskelenen bolgelerini gormek icin debug fonksiyonu
 						/*LaplacePyramid(homography, panorama1, buffer2, prevPanoSize->x, prevPanoSize->y, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
 						BYTE* r = P2(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
 						ShowColorImage(r, width1, height1);
