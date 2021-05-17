@@ -1,4 +1,4 @@
-#include "Image_Stitching_Form.h"
+#include "Image_Stitching.h"
 
 using namespace System;
 using namespace System::Windows::Forms;

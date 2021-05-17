@@ -100,6 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -140,33 +141,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Corner.h" />
+    <ClInclude Include="Dots.h" />
     <ClInclude Include="FFT.h" />
     <ClInclude Include="Homography.h" />
     <ClInclude Include="Image.h" />
-    <ClInclude Include="Image_Stitching_Form.h">
+    <ClInclude Include="Image_Stitching.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Panorama.h" />
     <ClInclude Include="Correlation.h" />
     <ClInclude Include="Process.h" />
-    <ClInclude Include="Zone.h" />
     <ClInclude Include="SVD.h" />
-    <ClInclude Include="xy.h" />
+    <ClInclude Include="Definitions.h" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Image_Stitching_Form.resx">
-      <DependentUpon>Image_Stitching_Form.h</DependentUpon>
+    <EmbeddedResource Include="Image_Stitching.resx">
+      <DependentUpon>Image_Stitching.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FFT.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="Image_Stitching_Form.cpp" />
+    <ClCompile Include="Image_Stitching.cpp" />
     <ClCompile Include="Panorama.cpp" />
     <ClCompile Include="Correlation.cpp" />
     <ClCompile Include="Process.cpp" />
-    <ClCompile Include="Zone.cpp" />
     <ClCompile Include="SVD.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
