@@ -763,6 +763,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int yStart = point1.y + yExtend;
 				int yEnd = point2.y;
 
+
 				for (int row = point1.y; row < yStart; row++) {
 					for (int col = xStart; col <= xEnd; col++)
 					{
@@ -1296,7 +1297,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 				else if (xExtend > 0 && yExtend == 0) {
 					// ise sadece saga genisler, sag kenar haric offset uygula
-					yExtend = currVec->y;
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1309,7 +1309,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 				else if (xExtend == 0 && yExtend > 0) {
 					// ise asagi genisler, taban haric offset uygulansin
-					xExtend = currVec->x;
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
@@ -1402,7 +1401,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 				else if (xExtend > 0 && yExtend == 0) {
 					// ise sadece sola genisler, sol kenar haric offset uygula
-					yExtend = currVec->y;
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
@@ -1434,7 +1432,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				else {
 					// goruntu sola ve asagi genislemezse her yone OFFSET uygulansin
 					xExtend = currVec->x;
-					yExtend = currVec->y;
 
 					if (point1.x != 0) {
 						point1.x += OFFSET;
@@ -1455,7 +1452,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int xStart = point1.x;
 				int xEnd = point1.x + xExtend;
 				int yStart = point1.y;
-				int yEnd = point4.y - yExtend;
+				int yEnd = point4.y - currVec->y;
 
 				double xLength = point3.x - xEnd;
 				double yLength = yEnd - yStart;
@@ -1601,8 +1598,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 				// genisleme yoksa sola OFFSET uygulansin
 				else {
-					xExtend = currVec->x;
-
 					if (point1.x != 0) {
 						point1.x += OFFSET;
 						point2.x += OFFSET;
