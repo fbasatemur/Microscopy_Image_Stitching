@@ -16,7 +16,7 @@ xy Transfer(double** H, int x, int y) {
 }
 
 xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Height, xy& position) {
-	// Homoraphy matrisine dayali birlestirme olusturulacak panaromik imgenin size belirlenir
+
 	xy upLeft, upRight, downLeft, downRight, * Size = new xy;
 	int tempWidth, tempHeight;
 
@@ -28,7 +28,6 @@ xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Hei
 	downRight = Transfer(H, Width, Height);
 	position.x = position.y = 0;
 
-	// --------- Imge sadece x ekseninin ters yonunde genisleme 
 	if ((upLeft.x < 0) || (downLeft.x < 0)) {
 		if (upLeft.x < 0)
 			if (downLeft.x < 0)
@@ -50,7 +49,7 @@ xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Hei
 		}
 	}
 
-	// -----  Imge sadece x ekseni yonunde genisleme 
+
 	if ((upRight.x > panoWidth) || (downRight.x > panoWidth)) {
 		if (upRight.x >= downRight.x)
 			tempWidth += (upRight.x - panoWidth);
@@ -58,7 +57,6 @@ xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Hei
 			tempWidth += (downRight.x - panoWidth);
 	}
 
-	// ----   Imge sadece  y ekseninin ters yonunde genisleme 
 	if ((upLeft.y < 0) || (upRight.y < 0)) {
 		if (upLeft.y < 0)
 			if (upRight.y < 0)
@@ -80,7 +78,6 @@ xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Hei
 		}
 	}
 
-	//---------- Imge sadece  y eksen yonunde genisleme
 	if ((downLeft.y > panoHeight) || (downRight.y > panoHeight)) {
 		if (downLeft.y >= downRight.y)
 			tempHeight += ((downLeft.y - panoHeight));
@@ -96,9 +93,6 @@ xy* ReSizePanorama(double** H, int panoWidth, int panoHeight, int Width, int Hei
 }
 
 BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy position) {
-	//  Gelen imgeyi (Raw)  Birlesmesi ile olusacak Size.x * Size.y  boyutundaki imgeye pano imgesi olarak yerlestir: 
-	//  1. önce tüm piksellerine görüntünün ortalama RGB degerlerini yerleþtir,
-	//  2. Raw degiskeni ile gelen imgeyi Size.x * Size.y  boyutundaki imgedeki konumuna konuþlandirarak kopyala 
 
 	int newPanoSizeX = newPanoSize.x;
 	int newPanoSizeY = newPanoSize.y;
@@ -107,7 +101,6 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 	BYTE* panoImg = new BYTE[newPanoSizeX * newPanoSizeY * 3];
 
-	// Imgedeki RGB degerleri ortalamasi hesaplaniyor, yatayda 10px atlanarak hizlandirildi
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, Raw) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR, tempG, tempB) nowait
@@ -125,7 +118,6 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 	tempG /= (int(Width / 10) * Height);
 	tempB /= (int(Width / 10) * Height);
 
-	// Gelen Raw daki imgenin R,G,B degeri icin hesaplanan bir ortalama degeri genisletlen imgenin tum pikselllerine yaz
 #pragma omp parallel num_threads(NUM_THREADS) shared(newPanoSizeY, newPanoSizeX, panoImg, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) nowait
@@ -139,7 +131,6 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 		}
 	}
 
-	// Genisletilen imgeye, orjinal imge sol uste konumlandiriliyor
 	size_t buf1, buf2;
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, newPanoSizeY, positionY, newPanoSizeX, positionX, Raw, panoImg) private(buf1, buf2)
 	{
@@ -161,7 +152,6 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 
 BYTE* SizeExtend(BYTE* Raw, int% width, int% height, int Width, int Height) {
 
-	// Goruntunun boyu 2N+1 x 2N+1 olacak sekilde ayarlaniyor
 	bool temp = true;
 	if (width >= height) {
 		int n = 2;
@@ -197,7 +187,6 @@ BYTE* SizeExtend(BYTE* Raw, int% width, int% height, int Width, int Height) {
 		}
 	}
 
-	// Genisletilecek goruntu 0 piksel degerleri ile initialize edilir.
 	BYTE* extendedImg = new BYTE[width * height * 3]();
 
 	int bufPos1, bufPos2;
@@ -226,7 +215,7 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
-							{1,4,7,4,1} }; // 273
+							{1,4,7,4,1} }; 
 
 	BYTE* Smooth = new BYTE[width * height * 3];
 	size_t temp1 = 0, temp2 = 0, temp3 = 0, bufpos;
@@ -327,7 +316,7 @@ BYTE2* Expand(T* Gauss, int width, int height)
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
-							{1,4,7,4,1} }; //273
+							{1,4,7,4,1} }; 
 
 	int newwidth = ((width - 1) * 2) + 1;
 	int newheight = ((height - 1) * 2) + 1;
@@ -437,7 +426,6 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 
 	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 
-	// Imgedeki RGB degerleri ortalamasi hesaplaniyor, yatayda 10 px atlanarak hizlandirildi
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, tempRaw, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR, tempG, tempB) nowait
@@ -476,9 +464,6 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 }
 
 BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position) {
-	//  Gelen imgeyi (Raw)  Birleþmesi ile oluþacak sizeX * sizeY  boyutundaki imgeye pano imgesi olarak yerleþtir: 
-	//  1. önce tüm piksellerine görüntünün ortalama RGB deðerlerini yerleþtir,
-	//  2. Raw deðiþkeni ile gelen imgeyi sizeX * sizeY  boyutundaki imgedeki konumuna konuþlandýrarak kopyala 
 
 	int sizeX = Size.x;
 	int sizeY = Size.y;
@@ -488,7 +473,6 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 	size_t tempR = 0, tempG = 0, tempB = 0, bufpos;
 	BYTE* resizedImg = new BYTE[sizeX * sizeY * 3];
 
-	// Imgedeki RGB degerlerinin ortalamasi hesaplanir, yatayda 10px atlanarak hizlandirildi
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, Raw, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) reduction(+:tempR, tempG, tempB) nowait
@@ -506,7 +490,6 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 	tempG /= (int(Width / 10) * Height);
 	tempB /= (int(Width / 10) * Height);
 
-	// Gelen Raw daki imgenin R,G,B deðeri için hesaplanan bir ortalama deðeri geniþletlen imgenin tüm pikselllerine yazýlýr
 #pragma omp parallel num_threads(NUM_THREADS) shared(sizeY, sizeX, resizedImg, tempR, tempG, tempB) private(bufpos)
 	{
 #pragma omp for schedule(dynamic) nowait
@@ -645,10 +628,10 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 	  p2 ******* p4
 	*/
 
-	xy point1 = Transfer(H, 0, 0);				// 2. goruntunun baslangici  sol_ust
-	xy point2 = Transfer(H, 0, orHeight);		// 2. goruntunun baslangici  sol_alt
-	xy point3 = Transfer(H, orWidth, 0);		// 2. goruntunun bitis sag_ust
-	xy point4 = Transfer(H, orWidth, orHeight); // 2. goruntunun bitis sag_alt
+	xy point1 = Transfer(H, 0, 0);				
+	xy point2 = Transfer(H, 0, orHeight);		
+	xy point3 = Transfer(H, orWidth, 0);		
+	xy point4 = Transfer(H, orWidth, orHeight); 
 
 	size_t bufpos;
 
@@ -664,35 +647,12 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 	if (isFirstLine == true) {
 
-		// Yalnizca Sag
 		if (currCornerID == 0 && currVec->x != 0 && currVec->y == 0)
 		{
-			/*Zero Zone
-
-				p1----****p3
-				------*****
-				-------?***
-				-----------
-				p2--------p4
-
-			*/
-			// en etkili cozum icin ? kordinatinin bulunmasi gerekli
-
-
-			// suanlik cozum (nerdeyse en etkili cozum kadar hatasiz : istisna 5 px lik offset)
-			/*Zero Zone
-
-			p1********p3
-			---*******!
-			----******!
-			-----*****!
-			p2----!!!!p4 - ALTA VE SAGA OFFSET UYGULANIR
-
-			*/
 
 			int xExtend = abs(newSize.x - Width);
 			if (xExtend == 0) {
-				// saga genisleme yoksa OFFSET uygulansin
+
 				if (point3.x != Width) {
 					point3.x -= OFFSET;
 					point4.x -= OFFSET;
@@ -726,21 +686,11 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			}
 
 		}
-		// Yukari yonde hareket (ilk satir degilse girmesine gerek yok)
+
 		else if (currCornerID == 2 || currCornerID == 3) {
 
-			// sadece yukari
+
 			if (currCornerID == 2 && currVec->x == 0 && currVec->y != 0) {
-
-				/*Zero Zone
-
-				p1********p3
-				***********
-				---*****---
-				-----*-----
-				p2--------p4 - OFFSET uygulanmasina gerek yok
-
-				*/
 
 				int yExtend = abs(newSize.y - Height);
 				if (yExtend > 0) {
@@ -787,18 +737,8 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 			}
-			// x != 0 ve y != 0 -> sag yukari
 			else if (currCornerID == 2 && currVec->x != 0 && currVec->y != 0)
 			{
-				/*Zero Zone
-
-				p1********p3
-				**********!
-				--********!
-				-----*****!
-				p2-----!!!p4
-
-				*/
 
 				int yExtend = abs(newSize.y - Height);
 				int xExtend = abs(newSize.x - Width);
@@ -859,18 +799,8 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 			}
-			// x != 0 ve y != 0 -> sol yukari 
 			else
 			{
-				/*Zero Zone
-
-				p1********p3
-				***********
-				********---
-				******-----
-				p2**------p4 - DURUMA GORE OFFSET UYGULANIR
-
-				*/
 
 				int yExtend = abs(newSize.y - Height);
 				int xExtend = abs(newSize.x - Width);
@@ -887,7 +817,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point4.y += yExtend;
 				}
 
-				// Genisleme yoksa diger goruntuler uzerinde hareket eder, offset verilir.
 				if (xExtend == 0) {
 					xExtend = currVec->x;
 					if (point1.x != 0) {
@@ -945,29 +874,17 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 			}
 		}
-		// Yalnizca Sol 
 		else
 		{
-			/*Zero Zone
-
-			p1******--p3
-			!******----
-			!*****-----
-			!****------
-			p2!!------p4 - ALTA VE SOLA OFFSET UYGULANIR
-
-			*/
 
 			int xExtend = abs(newSize.x - Width);
 			if (xExtend > 0) {
-				// sola genisleme varsa
 				point1.x = 0;
 				point2.x = 0;
 				point3.x += xExtend;
 				point4.x += xExtend;
 			}
 			else {
-				// sola genisleme yoksa OFFSET uygulansin
 				xExtend = currVec->x;
 				point2.y -= OFFSET;
 				point4.y -= OFFSET;
@@ -1001,42 +918,17 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			}
 		}
 	}
-	// ilk satir degilse
 	else {
 
-		// Yalnizca x de hareketlenme
 		if (currVec->x != 0 && currVec->y == 0) {
 
-			// saga dogru ise
+
 			if (currCornerID == 0) {
 
-				/*Zero Zone
-
-				p1--------p3
-				-----------
-				-------?***
-				------*****
-				p2---*****p4
-
-				*/
-				// en etkili cozum icin ? kordinatinin bulunmasi gerekli
-
-				// suanlik cozum (nerdeyse en etkili cozum kadar hatasiz : istisna 5 px lik offset)
-
-				/*Zero Zone
-
-				p1------!!p3 - YUKARI, SAGA ve ASAGI OFFSET UYGULANIR
-				-------***!
-				------****!
-				-----*****!
-				p2--!!!!!!p4
-
-				*/
 
 				int xExtend = abs(newSize.x - Width);
 
 				if (xExtend == 0) {
-					// saga genisleme yoksa sag kenara da OFFSET uygulansin
 					xExtend = currVec->x;
 
 					if (point3.x != Width) {
@@ -1076,40 +968,19 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					xTemp = int(xRate * yTemp);
 				}
 			}
-			// sola dogru ise -> currCornerID = 3 
+			
 			else {
 
-				/*Zero Zone
-
-				p1--------p3
-				-----------
-				****?------
-				******-----
-				p2*****---p4
-
-				*/
-				// en etkili cozum icin ? kordinatinin bulunmasi gerekli
-
-				// suanlik cozum (nerdeyse en etkili cozum kadar hatasiz : istisna 5 px lik offset)
-				/*Zero Zone
-
-				p1!!------p3 - USTE VE SOLA OFFSET UYGULANIR
-				!****-------
-				!*****------
-				!******-----
-				p2******--p4
-
-				*/
 
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend > 0) {
-					// sola genisleme varsa
+
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
 					point4.x += xExtend;
 				}
-				// genisleme yoksa OFFSET uygulansin
+
 				else {
 					xExtend = currVec->x;
 					point1.y += OFFSET;
@@ -1144,25 +1015,14 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			}
 		}
 
-		// Yalnizca y de hareketlenme
 		else if (currVec->x == 0 && currVec->y != 0) {
 
-			// Yalnizca asagi yonde hareketlenme (ilk satir olsa da olmasada buraya girer) 
 			if (currCornerID == 0) {
 
-				/*Zero Zone
-
-				p1--------p3
-				-----*-----
-				---*****---
-				!*********!
-				p2********p4 - Duruma gore OFFSET uygulanir
-
-				*/
 
 				int yExtend = abs(newSize.y - Height);
 				if (yExtend == 0) {
-					// asagi genisleme yoksa tabana offset uygula
+
 					if (point2.y != Height) {
 						point2.y -= OFFSET;
 						point4.y -= OFFSET;
@@ -1210,18 +1070,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 			}
-			// Yalnizca yukari yonde hareket - currCornerID = 2 olarak girer
 			else {
-
-				/*Zero Zone
-
-				p1!!!!!!!!p3
-				!*********!
-				---*****---
-				-----*-----
-				p2--------p4 - Uste her zaman offset uygulanir, cunku ilk satir degildir
-
-				*/
 
 				point1.y += OFFSET;
 				point3.y += OFFSET;
@@ -1270,33 +1119,21 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 			}
 		}
 
-		// Hem x hem de y de hareketlenme 
 		else if (currVec->x != 0 && currVec->y != 0) {
 
-			// saga ve asagi 
 			if (currCornerID == 0) {
-
-				/*Zero Zone
-
-				p1-----!!!p3
-				-----*****!
-				---*******!
-				!*********!
-				p2!!!!!!!!p4 - DURUMA GORE OFFSET UYGULANIR
-
-				*/
 
 				int xExtend = abs(newSize.x - Width);
 				int yExtend = abs(newSize.y - Height);
 				if (xExtend > 0 && yExtend > 0) {
-					// ise goruntu saga ve asagi genisler 
+
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 					point1.x += OFFSET;
 					point2.x += OFFSET;
 				}
 				else if (xExtend > 0 && yExtend == 0) {
-					// ise sadece saga genisler, sag kenar haric offset uygula
+
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1308,7 +1145,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point2.x += OFFSET;
 				}
 				else if (xExtend == 0 && yExtend > 0) {
-					// ise asagi genisler, taban haric offset uygulansin
+
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
@@ -1319,7 +1156,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y += OFFSET;
 				}
 				else {
-					// goruntu saga ve asagi genislemezse her yone OFFSET uygulansin
+
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1372,23 +1209,12 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 			}
 
-			// sola ve asagi 
 			else if (currCornerID == 1) {
-
-				/*Zero Zone
-
-				p1!!!-----p3
-				!*****-----
-				!*******---
-				!*********!
-				p2!!!!!!!!p4 - DURUMA GORE OFFSET UYGULANIR
-
-				*/
 
 				int xExtend = abs(newSize.x - Width);
 				int yExtend = abs(newSize.y - Height);
 				if (xExtend > 0 && yExtend > 0) {
-					// ise goruntu sola ve asagi genisler 
+
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
@@ -1400,7 +1226,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point4.x -= OFFSET;
 				}
 				else if (xExtend > 0 && yExtend == 0) {
-					// ise sadece sola genisler, sol kenar haric offset uygula
+
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
@@ -1416,7 +1242,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point4.x -= OFFSET;
 				}
 				else if (xExtend == 0 && yExtend > 0) {
-					// ise asagi genisler, taban haric offset uygulansin
+
 					xExtend = currVec->x;
 
 					point3.x -= OFFSET;
@@ -1430,7 +1256,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y += OFFSET;
 				}
 				else {
-					// goruntu sola ve asagi genislemezse her yone OFFSET uygulansin
+
 					xExtend = currVec->x;
 
 					if (point1.x != 0) {
@@ -1481,37 +1307,11 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 			}
 
-			// sag ve yukari 
 			else if (currCornerID == 2) {
 
-				/*Zero Zone
-
-					p1----****p3
-					------*****
-					-------?***
-					-----------
-					p2--------p4
-
-				*/
-				// en etkili cozum icin ? kordinatinin bulunmasi gerekli
-
-				// Suanki cozum OFFSET icerir ve hatasiz(5 px istisna)
-				// IlkSatir degilse ve bu yonde ise her zaman offset uygulanmali,
-				// Cunku genisleme olmasi durumunda ilk satir bloguna a girecektir
-				/*Zero Zone
-
-					p1!!!!!!!!p3
-					!*********!
-					---*******!
-					------****!
-					p2-----!!p4 - HER ZAMAN OFFSET UYGULANIR
-
-				*/
-
-				// Yukari genisleme kontrolu yapilmaz cunku genisleme olursa ilk satir bloguna girer.
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend == 0) {
-					// ise sag tarafa da offset uygulansin
+
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
@@ -1559,45 +1359,18 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 			}
 
-			// sol ve yukari -> currCornerID = 3
 			else {
 
-				/*Zero Zone
-
-					p1*****---p3
-					******-----
-					****?------
-					-----------
-					p2--------p4
-
-				*/
-				// en etkili cozum icin ? kordinatinin bulunmasi gerekli
-
-				// Suanki cozum OFFSET icerir ve hatasiz(5 px istisna)
-				// IlkSatir degilse ve bu yonde ise her zaman offset uygulanmali,
-				// Cunku genisleme olmasi durumunda ilk satir bloguna a girecektir
-
-				/*Zero Zone
-
-					p1!!!!!!!!p3
-					!********--
-					!******----
-					!****------
-					p2!!-----p4 - DURUMA GORE OFFSET UYGULANIR
-
-				*/
-
-				// Yukari genisleme kontrolu yapilmaz cunku genisleme olursa ilk satir bloguna girer.
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend > 0) {
-					// sola genisleme varsa, sola offset uygulanmasin
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
 					point4.x += xExtend;
 				}
-				// genisleme yoksa sola OFFSET uygulansin
 				else {
+					xExtend = currVec->x;
+					
 					if (point1.x != 0) {
 						point1.x += OFFSET;
 						point2.x += OFFSET;
