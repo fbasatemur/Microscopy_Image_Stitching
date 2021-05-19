@@ -115,7 +115,6 @@ namespace Image_Stitching {
 			   pictureBox4->Height = height;
 			   pictureBox4->Image = surface;
 
-			   // buffer image incele
 			   Color c;
 			   int psw, bufpos, row, column;
 			   psw = width * 3;
@@ -457,7 +456,7 @@ namespace Image_Stitching {
 
 					currCornerID = ZoneDetection(intensity1, intensity2, width, height, currVec, pocDot);
 					// ShowImageIntensity(intensity1, intensity2, width, height);
-					// Eksenlerce kesismeyen Random 4 nokta bul
+
 					xy* img1Dots = Rand4Dots(currCornerID, pocDot, width, height);
 
 					if (img1Dots == NULL) {
@@ -465,7 +464,6 @@ namespace Image_Stitching {
 					}
 					else {
 
-						// Img2 uzerinde eslesen noktalari bul
 						xy* img2Dots = MatchingDots(currCornerID, img1Dots, currVec);
 						LineUpdate(currCornerID, currVec);
 

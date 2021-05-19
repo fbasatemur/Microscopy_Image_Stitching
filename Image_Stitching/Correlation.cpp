@@ -73,8 +73,8 @@ float Correlation(BYTE* img1, BYTE* img2, int width, int height, int zoneWidth, 
 
 	int newR1, newC1, newR2, newC2;
 	unsigned int total1 = 0, total2 = 0;
-	double total = 0.0F, totalSqr1 = 0.0F, totalSqr2 = 0.0F;
-	double mean1, mean2;
+	float total = 0.0F, totalSqr1 = 0.0F, totalSqr2 = 0.0F;
+	float mean1, mean2;
 
 #pragma omp parallel num_threads(NUM_THREADS) shared(zoneHeight,zoneWidth,start1H,start2H,start1W,start2W, width, img1, img2) private(newR1, newR2, newC1, newC2)
 	{
@@ -93,8 +93,8 @@ float Correlation(BYTE* img1, BYTE* img2, int width, int height, int zoneWidth, 
 		}
 	}
 
-	mean1 = double(total1 / (zoneHeight * zoneWidth));
-	mean2 = double(total2 / (zoneHeight * zoneWidth));
+	mean1 = float(total1 / (zoneHeight * zoneWidth));
+	mean2 = float(total2 / (zoneHeight * zoneWidth));
 
 #pragma omp parallel num_threads(NUM_THREADS) shared(zoneHeight,zoneWidth,start1H,start2H,start1W,start2W,width,img1,img2,mean1,mean2) private(newR1, newR2, newC1, newC2)
 	{
@@ -185,18 +185,12 @@ int ZoneDetection(BYTE* img1, BYTE* img2, int width, int height, xy* vec, xy* po
 		*	1	| 0 *
 		*************
 
-		0: pocDot noktasinin sag alt bolgesi
-		1: pocDot noktasinin sol alt bolgesi
-		2: pocDot noktasinin sag ust bolgesi
-		3: pocDot noktasinin sol ust bolgesi
-
 	*/
 
 #pragma omp parallel sections num_threads(NUM_THREADS)
 	{
 #pragma omp section
 		{
-			// bolge 0 eslesme
 			int zoneWidth = width - pocDot->x;
 			int zoneHeight = height - pocDot->y;
 			if (zoneWidth != 0 && zoneHeight != 0) {
@@ -210,7 +204,6 @@ int ZoneDetection(BYTE* img1, BYTE* img2, int width, int height, xy* vec, xy* po
 
 #pragma omp section
 		{
-			// bolge 1 eslesme
 			int zoneWidth = pocDot->x;
 			int zoneHeight = height - pocDot->y;
 			if (zoneWidth != 0 && zoneHeight != 0) {
@@ -223,7 +216,6 @@ int ZoneDetection(BYTE* img1, BYTE* img2, int width, int height, xy* vec, xy* po
 		}
 #pragma omp section
 		{
-			// bolge 2 eslesme
 			int zoneWidth = width - pocDot->x;
 			int zoneHeight = pocDot->y;
 			if (zoneWidth != 0 && zoneHeight != 0) {
@@ -236,7 +228,6 @@ int ZoneDetection(BYTE* img1, BYTE* img2, int width, int height, xy* vec, xy* po
 		}
 #pragma omp section
 		{
-			// bolge 3 eslesme
 			int zoneWidth = pocDot->x;
 			int zoneHeight = pocDot->y;
 			if (zoneWidth != 0 && zoneHeight != 0) {
