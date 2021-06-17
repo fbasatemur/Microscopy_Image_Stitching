@@ -124,6 +124,7 @@ BYTE* PanoToResized(BYTE* Raw, int Width, int Height, xy newPanoSize, xy positio
 		for (int i = 0; i < newPanoSizeY; i++) {
 			for (int j = 0; j < newPanoSizeX; j++) {
 				bufpos = (newPanoSizeY - i - 1) * newPanoSizeX * 3 + j * 3;
+
 				panoImg[bufpos + 2] = (BYTE)tempR;
 				panoImg[bufpos + 1] = (BYTE)tempG;
 				panoImg[bufpos] = (BYTE)tempB;
@@ -187,6 +188,7 @@ BYTE* SizeExtend(BYTE* Raw, int% width, int% height, int Width, int Height) {
 		}
 	}
 
+
 	BYTE* extendedImg = new BYTE[width * height * 3]();
 
 	int bufPos1, bufPos2;
@@ -208,6 +210,7 @@ BYTE* SizeExtend(BYTE* Raw, int% width, int% height, int Width, int Height) {
 	return extendedImg;
 }
 
+
 template<typename T>
 T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 {
@@ -215,7 +218,7 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
-							{1,4,7,4,1} }; 
+							{1,4,7,4,1} }; // 273
 
 	BYTE* Smooth = new BYTE[width * height * 3];
 	size_t temp1 = 0, temp2 = 0, temp3 = 0, bufpos;
@@ -248,6 +251,7 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 					temp1 /= 273;
 					temp2 /= 273;
 					temp3 /= 273;
+
 					bufpos = (height - i - 1) * width * 3 + j * 3;
 					Smooth[bufpos] = BYTE(temp1);
 					Smooth[bufpos + 1] = BYTE(temp2);
@@ -256,7 +260,6 @@ T* GaussPyramid(BYTE* Raw, int% width, int% height, T* result)
 			}
 		}
 	}
-
 
 	int newHeight = ((height - 1) / 2) + 1;
 	int newWidth = ((width - 1) / 2) + 1;
@@ -316,7 +319,7 @@ BYTE2* Expand(T* Gauss, int width, int height)
 							{4,16,26,16,4},
 							{7,26,41,26,7},
 							{4,16,26,16,4},
-							{1,4,7,4,1} }; 
+							{1,4,7,4,1} }; //273
 
 	int newwidth = ((width - 1) * 2) + 1;
 	int newheight = ((height - 1) * 2) + 1;
@@ -463,6 +466,7 @@ void GoruntuDuzelt(BYTE* Raw, xy Size, BYTE* tempRaw, int Width, int Height) {
 
 }
 
+
 BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy position) {
 
 	int sizeX = Size.x;
@@ -496,6 +500,7 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 		for (int i = 0; i < sizeY; i++) {
 			for (int j = 0; j < sizeX; j++) {
 				bufpos = (sizeY - i - 1) * sizeX * 3 + j * 3;
+
 				resizedImg[bufpos + 2] = BYTE(tempR);
 				resizedImg[bufpos + 1] = BYTE(tempG);
 				resizedImg[bufpos] = BYTE(tempB);
@@ -507,7 +512,7 @@ BYTE* ImageToResized(double** H, BYTE* Raw, int Width, int Height, xy Size, xy p
 #pragma omp parallel num_threads(NUM_THREADS) shared(Height, Width, sizeY, positionY, sizeX, positionX, Raw, resizedImg)
 	{
 		xy point;
-		int buf; size_t rawBuf;
+		int buf; int rawBuf;
 #pragma omp for schedule(dynamic) nowait
 		for (int i = 0; i < Height; i++) {
 			for (int j = 0; j < Width; j++) {
@@ -618,7 +623,7 @@ BYTE2* SumLaplace(BYTE2* Laplace1, BYTE2* Laplace2, int width, int height) {
 	return Laplace1;
 }
 
-BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSize, int width, int height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* prevVec, xy* currVec) {
+BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSize, int width, int height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* currVec) {
 
 	/*
 	* p1 ******* p3
@@ -652,7 +657,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 			int xExtend = abs(newSize.x - Width);
 			if (xExtend == 0) {
-
 				if (point3.x != Width) {
 					point3.x -= OFFSET;
 					point4.x -= OFFSET;
@@ -688,7 +692,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 		}
 
 		else if (currCornerID == 2 || currCornerID == 3) {
-
 
 			if (currCornerID == 2 && currVec->x == 0 && currVec->y != 0) {
 
@@ -737,6 +740,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 			}
+
 			else if (currCornerID == 2 && currVec->x != 0 && currVec->y != 0)
 			{
 
@@ -748,9 +752,9 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y = 0;
 					point4.y += yExtend;
 				}
-				else {
-					yExtend = currVec->y;
-				}
+				
+				yExtend = currVec->y;
+				
 
 				if (xExtend == 0) {
 					xExtend = currVec->x;
@@ -799,11 +803,13 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				}
 
 			}
+			
 			else
 			{
 
 				int yExtend = abs(newSize.y - Height);
 				int xExtend = abs(newSize.x - Width);
+
 				if (xExtend > 0) {
 					point1.x = 0;
 					point2.x = 0;
@@ -827,6 +833,10 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
 					}
+					if (yExtend > 0 && point2.y != Height) {
+						point2.y -= OFFSET;
+						point4.y -= OFFSET;
+					}
 				}
 				if (yExtend == 0) {
 					yExtend = currVec->y;
@@ -835,10 +845,15 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 						point3.y += OFFSET;
 					}
 					if (point2.y != Height) {
-						point2.y -= OFFSET;
+						point2.y -= OFFSET;		
 						point4.y -= OFFSET;
 					}
+					if (xExtend > 0 && point3.x != Width) {
+						point3.x -= OFFSET;
+						point4.x -= OFFSET;
+					}
 				};
+
 
 				int xStart = point1.x;
 				int xEnd = point2.x + xExtend;
@@ -876,9 +891,9 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 		}
 		else
 		{
-
 			int xExtend = abs(newSize.x - Width);
 			if (xExtend > 0) {
+
 				point1.x = 0;
 				point2.x = 0;
 				point3.x += xExtend;
@@ -922,9 +937,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 		if (currVec->x != 0 && currVec->y == 0) {
 
-
 			if (currCornerID == 0) {
-
 
 				int xExtend = abs(newSize.x - Width);
 
@@ -968,19 +981,16 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					xTemp = int(xRate * yTemp);
 				}
 			}
-			
-			else {
 
+			else {
 
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend > 0) {
-
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
 					point4.x += xExtend;
 				}
-
 				else {
 					xExtend = currVec->x;
 					point1.y += OFFSET;
@@ -1019,10 +1029,8 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 			if (currCornerID == 0) {
 
-
 				int yExtend = abs(newSize.y - Height);
 				if (yExtend == 0) {
-
 					if (point2.y != Height) {
 						point2.y -= OFFSET;
 						point4.y -= OFFSET;
@@ -1070,6 +1078,7 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					}
 				}
 			}
+
 			else {
 
 				point1.y += OFFSET;
@@ -1126,14 +1135,12 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int xExtend = abs(newSize.x - Width);
 				int yExtend = abs(newSize.y - Height);
 				if (xExtend > 0 && yExtend > 0) {
-
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 					point1.x += OFFSET;
 					point2.x += OFFSET;
 				}
 				else if (xExtend > 0 && yExtend == 0) {
-
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1145,7 +1152,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point2.x += OFFSET;
 				}
 				else if (xExtend == 0 && yExtend > 0) {
-
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
@@ -1156,7 +1162,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y += OFFSET;
 				}
 				else {
-
 					point1.y += OFFSET;
 					point3.y += OFFSET;
 
@@ -1214,7 +1219,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 				int xExtend = abs(newSize.x - Width);
 				int yExtend = abs(newSize.y - Height);
 				if (xExtend > 0 && yExtend > 0) {
-
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
@@ -1226,7 +1230,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point4.x -= OFFSET;
 				}
 				else if (xExtend > 0 && yExtend == 0) {
-
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
@@ -1242,7 +1245,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point4.x -= OFFSET;
 				}
 				else if (xExtend == 0 && yExtend > 0) {
-
 					xExtend = currVec->x;
 
 					point3.x -= OFFSET;
@@ -1256,7 +1258,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y += OFFSET;
 				}
 				else {
-
 					xExtend = currVec->x;
 
 					if (point1.x != 0) {
@@ -1311,7 +1312,6 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend == 0) {
-
 					if (point3.x != Width) {
 						point3.x -= OFFSET;
 						point4.x -= OFFSET;
@@ -1356,18 +1356,20 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					yTemp++;
 					xTemp = int(xRate * yTemp);
 				}
-
 			}
 
 			else {
 
+				
 				int xExtend = abs(newSize.x - Width);
 				if (xExtend > 0) {
+					
 					point1.x = 0;
 					point2.x = 0;
 					point3.x += xExtend;
 					point4.x += xExtend;
 				}
+				
 				else {
 					xExtend = currVec->x;
 					
@@ -1424,19 +1426,15 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 	return Raw;
 }
 
-BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* prevVec, xy* currVec)
+
+BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* currVec)
 {
 	int bufpos1, bufpos2;
 	BYTE* M = new BYTE[width * height * 3];
 
-#pragma omp parallel num_threads(NUM_THREADS) shared(height, width, M)
-	{
-#pragma omp for schedule(dynamic) nowait
-		for (int i = 0; i < height * width * 3; i++)
-			M[i] = 255;
-	}
+	memset(M, (BYTE)255, height * width * 3);
 
-	M = Filter(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, prevVec, currVec);
+	M = Filter(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, currVec);
 
 	BYTE* MGauss1 = M;
 	BYTE2* SLaplace1 = new BYTE2[width * height * 3];
@@ -1568,7 +1566,7 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 	return panorama;
 }
 
-//BYTE* P2(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* prevVec, xy* currVec) 
+//BYTE* P2(double** H, int Width, int Height, xy Size, xy position, BYTE2** LaplacePyramid1, BYTE2** LaplacePyramid2, int& width, int& height, int orWidth, int orHeight, bool isFirstLine, int currCornerID, xy* currVec) 
 //{
 //	int i, j, bufpos;
 //
@@ -1576,7 +1574,7 @@ BYTE* PanaromicImage(double** H, int Width, int Height, xy Size, xy position, BY
 //	for (i = 0; i < height * width * 3; i++)
 //		M[i] = 255;
 //
-//	M = Filtre(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, prevVec, currVec);
+//	M = Filtre(M, H, position, Width, Height, Size, width, height, orWidth, orHeight, isFirstLine, currCornerID, currVec);
 //
 //	return M;
 //}

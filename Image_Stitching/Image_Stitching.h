@@ -51,14 +51,7 @@ namespace Image_Stitching {
 	private: System::Windows::Forms::ToolStripMenuItem^ openToolStripMenuItem;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::PictureBox^ pictureBox4;
-	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::Label^ label9;
-	private: System::Windows::Forms::Label^ label10;
-	private: System::Windows::Forms::Label^ label11;
-	private: System::Windows::Forms::Label^ labelImg2Dot4;
-	private: System::Windows::Forms::Label^ labelImg2Dot3;
-	private: System::Windows::Forms::Label^ labelImg2Dot2;
-	private: System::Windows::Forms::Label^ labelImg2Dot1;
+
 	private: System::Windows::Forms::Label^ labelResultS;
 
 	private:
@@ -212,14 +205,6 @@ namespace Image_Stitching {
 			   this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			   this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			   this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
-			   this->label8 = (gcnew System::Windows::Forms::Label());
-			   this->label9 = (gcnew System::Windows::Forms::Label());
-			   this->label10 = (gcnew System::Windows::Forms::Label());
-			   this->label11 = (gcnew System::Windows::Forms::Label());
-			   this->labelImg2Dot4 = (gcnew System::Windows::Forms::Label());
-			   this->labelImg2Dot3 = (gcnew System::Windows::Forms::Label());
-			   this->labelImg2Dot2 = (gcnew System::Windows::Forms::Label());
-			   this->labelImg2Dot1 = (gcnew System::Windows::Forms::Label());
 			   this->labelResultS = (gcnew System::Windows::Forms::Label());
 			   this->imgIndexLbl = (gcnew System::Windows::Forms::Label());
 			   this->label14 = (gcnew System::Windows::Forms::Label());
@@ -235,7 +220,7 @@ namespace Image_Stitching {
 			   this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			   this->menuStrip1->Name = L"menuStrip1";
 			   this->menuStrip1->Padding = System::Windows::Forms::Padding(5, 2, 0, 2);
-			   this->menuStrip1->Size = System::Drawing::Size(1924, 28);
+			   this->menuStrip1->Size = System::Drawing::Size(1939, 28);
 			   this->menuStrip1->TabIndex = 2;
 			   this->menuStrip1->Text = L"menuStrip1";
 			   // 
@@ -268,78 +253,6 @@ namespace Image_Stitching {
 			   this->pictureBox4->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			   this->pictureBox4->TabIndex = 7;
 			   this->pictureBox4->TabStop = false;
-			   // 
-			   // label8
-			   // 
-			   this->label8->AutoSize = true;
-			   this->label8->Location = System::Drawing::Point(1853, 1018);
-			   this->label8->Name = L"label8";
-			   this->label8->Size = System::Drawing::Size(46, 17);
-			   this->label8->TabIndex = 29;
-			   this->label8->Text = L"Dot 4:";
-			   // 
-			   // label9
-			   // 
-			   this->label9->AutoSize = true;
-			   this->label9->Location = System::Drawing::Point(1853, 988);
-			   this->label9->Name = L"label9";
-			   this->label9->Size = System::Drawing::Size(46, 17);
-			   this->label9->TabIndex = 28;
-			   this->label9->Text = L"Dot 3:";
-			   // 
-			   // label10
-			   // 
-			   this->label10->AutoSize = true;
-			   this->label10->Location = System::Drawing::Point(1663, 1015);
-			   this->label10->Name = L"label10";
-			   this->label10->Size = System::Drawing::Size(46, 17);
-			   this->label10->TabIndex = 27;
-			   this->label10->Text = L"Dot 2:";
-			   // 
-			   // label11
-			   // 
-			   this->label11->AutoSize = true;
-			   this->label11->Location = System::Drawing::Point(1663, 988);
-			   this->label11->Name = L"label11";
-			   this->label11->Size = System::Drawing::Size(50, 17);
-			   this->label11->TabIndex = 26;
-			   this->label11->Text = L"Dot 1: ";
-			   // 
-			   // labelImg2Dot4
-			   // 
-			   this->labelImg2Dot4->AutoSize = true;
-			   this->labelImg2Dot4->Location = System::Drawing::Point(1905, 1018);
-			   this->labelImg2Dot4->Name = L"labelImg2Dot4";
-			   this->labelImg2Dot4->Size = System::Drawing::Size(20, 17);
-			   this->labelImg2Dot4->TabIndex = 24;
-			   this->labelImg2Dot4->Text = L"...";
-			   // 
-			   // labelImg2Dot3
-			   // 
-			   this->labelImg2Dot3->AutoSize = true;
-			   this->labelImg2Dot3->Location = System::Drawing::Point(1905, 988);
-			   this->labelImg2Dot3->Name = L"labelImg2Dot3";
-			   this->labelImg2Dot3->Size = System::Drawing::Size(20, 17);
-			   this->labelImg2Dot3->TabIndex = 23;
-			   this->labelImg2Dot3->Text = L"...";
-			   // 
-			   // labelImg2Dot2
-			   // 
-			   this->labelImg2Dot2->AutoSize = true;
-			   this->labelImg2Dot2->Location = System::Drawing::Point(1715, 1015);
-			   this->labelImg2Dot2->Name = L"labelImg2Dot2";
-			   this->labelImg2Dot2->Size = System::Drawing::Size(20, 17);
-			   this->labelImg2Dot2->TabIndex = 22;
-			   this->labelImg2Dot2->Text = L"...";
-			   // 
-			   // labelImg2Dot1
-			   // 
-			   this->labelImg2Dot1->AutoSize = true;
-			   this->labelImg2Dot1->Location = System::Drawing::Point(1715, 988);
-			   this->labelImg2Dot1->Name = L"labelImg2Dot1";
-			   this->labelImg2Dot1->Size = System::Drawing::Size(20, 17);
-			   this->labelImg2Dot1->TabIndex = 21;
-			   this->labelImg2Dot1->Text = L"...";
 			   // 
 			   // labelResultS
 			   // 
@@ -382,19 +295,11 @@ namespace Image_Stitching {
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			   this->ClientSize = System::Drawing::Size(1924, 846);
+			   this->ClientSize = System::Drawing::Size(1939, 889);
 			   this->Controls->Add(this->saveButton);
 			   this->Controls->Add(this->imgIndexLbl);
 			   this->Controls->Add(this->label14);
 			   this->Controls->Add(this->labelResultS);
-			   this->Controls->Add(this->label8);
-			   this->Controls->Add(this->label9);
-			   this->Controls->Add(this->label10);
-			   this->Controls->Add(this->label11);
-			   this->Controls->Add(this->labelImg2Dot4);
-			   this->Controls->Add(this->labelImg2Dot3);
-			   this->Controls->Add(this->labelImg2Dot2);
-			   this->Controls->Add(this->labelImg2Dot1);
 			   this->Controls->Add(this->pictureBox4);
 			   this->Controls->Add(this->menuStrip1);
 			   this->MainMenuStrip = this->menuStrip1;
@@ -456,7 +361,7 @@ namespace Image_Stitching {
 
 					currCornerID = ZoneDetection(intensity1, intensity2, width, height, currVec, pocDot);
 					// ShowImageIntensity(intensity1, intensity2, width, height);
-
+					// Eksenlerce kesismeyen Random 4 nokta bul
 					xy* img1Dots = Rand4Dots(currCornerID, pocDot, width, height);
 
 					if (img1Dots == NULL) {
@@ -464,6 +369,7 @@ namespace Image_Stitching {
 					}
 					else {
 
+						// Img2 uzerinde eslesen noktalari bul
 						xy* img2Dots = MatchingDots(currCornerID, img1Dots, currVec);
 						LineUpdate(currCornerID, currVec);
 
@@ -494,12 +400,12 @@ namespace Image_Stitching {
 
 						// Maskelenen bolgelerini gormek icin debug fonksiyonu
 						/*LaplacePyramid(homography, buffer1, buffer2, width, height, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						BYTE* r = P2(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						BYTE* r = P2(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, currVec);
 						ShowColorImage(r, width1, height1);
 						delete[] r;*/
 
 						LaplacePyramid(homography, buffer1, buffer2, width, height, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						panorama1 = PanaromicImage(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						panorama1 = PanaromicImage(homography, width, height, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, currVec);
 						ShowColorImage(panorama1, currPanoSize->x, currPanoSize->y);
 
 						prevPanoSize->x = currPanoSize->x;
@@ -574,12 +480,12 @@ namespace Image_Stitching {
 
 						// Maskelenen bolgelerini gormek icin debug fonksiyonu
 						/*LaplacePyramid(homography, panorama1, buffer2, prevPanoSize->x, prevPanoSize->y, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						BYTE* r = P2(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						BYTE* r = P2(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, currVec);
 						ShowColorImage(r, width1, height1);
 						delete[] r;*/
 
 						LaplacePyramid(homography, panorama1, buffer2, prevPanoSize->x, prevPanoSize->y, width, height, LaplacePyramid1, LaplacePyramid2, width1, height1, *currPanoSize, position);
-						panorama2 = PanaromicImage(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, prevVec, currVec);
+						panorama2 = PanaromicImage(homography, prevPanoSize->x, prevPanoSize->y, *currPanoSize, position, LaplacePyramid1, LaplacePyramid2, width1, height1, width, height, isFirstLine, currCornerID, currVec);
 						ShowColorImage(panorama2, currPanoSize->x, currPanoSize->y);
 						UpdatePrevVec(currCornerID, prevVec, currVec);
 
