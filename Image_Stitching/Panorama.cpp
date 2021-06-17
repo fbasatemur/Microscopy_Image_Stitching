@@ -752,9 +752,9 @@ BYTE* Filter(BYTE* Raw, double** H, xy position, int Width, int Height, xy newSi
 					point3.y = 0;
 					point4.y += yExtend;
 				}
-				else {
-					yExtend = currVec->y;
-				}
+				
+				yExtend = currVec->y;
+				
 
 				if (xExtend == 0) {
 					xExtend = currVec->x;
