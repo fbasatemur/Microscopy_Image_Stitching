@@ -26,3 +26,5 @@ Multiple merging can be done using datasets consisting of images. In addition, t
 ![image 3](https://github.com/fbasatemur/Microscopy_Image_Stitching/blob/main/sample_images/big_image1.bmp)
 
 ![image 4](https://github.com/fbasatemur/Microscopy_Image_Stitching/blob/main/sample_images/big_image2.bmp)
+
+![image 5](https://github.com/fbasatemur/Microscopy_Image_Stitching/blob/main/sample_images/big_image3.bmp)
